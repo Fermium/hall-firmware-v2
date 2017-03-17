@@ -5,7 +5,8 @@
 
 ### PROJECT_DIR
 ### This is the path to where you have created/cloned your project
-PROJECT_DIR       = /home/davide/Hall-firmware-new
+#PROJECT_DIR       = /home/davide/Hall-firmware-new
+PROJECT_DIR       = /Users/davide/hall-firmware-v2
 
 
 ### AVR_GCC_VERSION
@@ -18,8 +19,8 @@ ARDMK_DIR         = $(PROJECT_DIR)/Arduino-Makefile
 
 ### ARDUINO_DIR
 ### Path to the Arduino application and ressources directory.
-ARDUINO_DIR       = /usr/share/arduino
-
+#ARDUINO_DIR       = /usr/share/arduino
+ARDUINO_DIR        = /Applications/Arduino.app/Contents/Java
 ### USER_LIB_PATH
 ### Path to where the your project's libraries are stored.
 USER_LIB_PATH     :=  $(realpath $(PROJECT_DIR)/lib)
@@ -40,17 +41,17 @@ MONITOR_BAUDRATE  = 115200
 
 ### AVR_TOOLS_DIR
 ### Path to the AVR tools directory such as avr-gcc, avr-g++, etc.
-AVR_TOOLS_DIR     = /usr
+AVR_TOOLS_DIR     = /usr/local
 
 ### AVRDDUDE
 ### Path to avrdude directory.
 AVRDDUDE          = /usr/bin/avrdude
 
 ### CFLAGS_STD
-CFLAGS_STD        = -std=gnu11
+CFLAGS_STD        = -std=gnu11 
 
 ### CXXFLAGS_STD
-CXXFLAGS_STD      = -std=gnu++11
+CXXFLAGS_STD      = -std=gnu++11 
 
 ### CPPFLAGS
 ### Flags you might want to set for debugging purpose. Comment to stop.
