@@ -3,6 +3,7 @@
 ### For detailled explanations about all the avalaible options,
 ### please refer to https://github.com/sudar/Arduino-Makefile/blob/master/arduino-mk-vars.md
 
+
 ### PROJECT_DIR
 ### This is the path to where you have created/cloned your project
 PROJECT_DIR       = /home/davide/Hall-firmware-new
@@ -47,10 +48,10 @@ AVR_TOOLS_DIR     = /usr
 AVRDDUDE          = /usr/bin/avrdude
 
 ### CFLAGS_STD
-CFLAGS_STD        = -std=gnu11
+CFLAGS_STD        = -std=gnu11 -L/home/davide/Hall-firmware-new/slib/data-chan/Device/Bootstrap -lbootstrap
 
 ### CXXFLAGS_STD
-CXXFLAGS_STD      = -std=gnu++11
+CXXFLAGS_STD      = -std=gnu++11 -L/home/davide/Hall-firmware-new/slib/data-chan/Device/Bootstrap -lbootstrap
 
 ### CPPFLAGS
 ### Flags you might want to set for debugging purpose. Comment to stop.
