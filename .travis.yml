@@ -5,8 +5,8 @@ language: c
 compiler:
   - gcc
 install: 
-  - apt-get update -y -q
-  - apt-get install -y -q gcc-avr avr-libc avrdude make git clang
+  - sudo apt-get update -y -q
+  - sudo apt-get install -y -q gcc-avr avr-libc avrdude make git clang
   
 build:
   - make 
