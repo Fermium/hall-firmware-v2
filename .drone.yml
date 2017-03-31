@@ -1,0 +1,18 @@
+pipeline:
+
+  flash_device:
+    image: ubuntu:xenial
+    commands:
+      - export DEBIAN_FRONTEND=noninteractive
+      - apt-get update -y -q
+      - apt-get install -y -q gcc-avr avr-libc avrdude make git clang
+      - make 
+
+  slack:
+    image: plugins/slack
+    webhook: https://hooks.slack.com/services/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
+    channel: project-hall-flux
+    username: drone-ci
+    icon_url: https://github.com/drone/brand/raw/master/logos/png/drone-logo_512.png
+    when:
+     status: [ failure, success ]
