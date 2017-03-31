@@ -1,5 +1,5 @@
 language: c
 compiler:
   - gcc
-script: 
-  - script/install.sh
+install: 
+  - bash script/install.sh
