@@ -17,9 +17,13 @@ SOURCES = main.c
 OUTDIR = build
 # PROGRAMMER: name of programmer
 PROGRAMMER = usbasp
+# CPU frequency
+F_CPU        = 16000000
+F_USB        = $(F_CPU)
 
 # define flags
 CFLAGS = -mmcu=$(MCU) -g -Os -Wall -Wunused
+CFLAGS += -DF_CPU=$(F_CPU)
 ASFLAGS = -mmcu=$(MCU) -x assembler-with-cpp -Wa,-gstabs
 LDFLAGS = -mmcu=$(MCU) -Wl,-Map=$(OUTDIR)/$(TARGET).map
 # only use -P flag if port is set
@@ -42,7 +46,7 @@ GASP    = avr-gasp
 NM      = avr-nm
 OBJCOPY = avr-objcopy
 RM      = rm -f
-MKDIR	= mkdir -p
+MKDIR	  = mkdir -p
 AVRDUDE = avrdude
 #######################################
 
@@ -78,6 +82,9 @@ $(OUTDIR)/%.o: src/%.c | $(OUTDIR)
 # create the output directory
 $(OUTDIR):
 	$(MKDIR) $(OUTDIR)
+	
+size: $(OUTDIR)/$(TARGET).hex
+	avr-size --mcu=$(MCU)  $(OUTDIR)/$(TARGET).hex
 
 # download to mcu flash
 flash: $(OUTDIR)/$(TARGET).hex
