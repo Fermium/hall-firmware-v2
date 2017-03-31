@@ -51,7 +51,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC =	$(TARGET).c \
+SRC =	src/$(TARGET).c \
 
 
 # MCU name, you MUST set this to match the board you are using
