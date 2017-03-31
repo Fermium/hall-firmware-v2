@@ -1,0 +1,6 @@
+[submodule "Arduino-Makefile"]
+	path = Arduino-Makefile
+	url = https://github.com/WeAreLeka/Arduino-Makefile
+[submodule "slib/data-chan"]
+	path = slib/data-chan
+	url = git@github.com:NeroReflex/data-chan.git
