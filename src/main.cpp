@@ -1,18 +1,27 @@
-#include <Arduino.h>
-#include <Wire.h>
-#include <datachan.h>
+/*
+ * (c) Anil Kumar Pugalia, 2010. Email: email@sarika-pugs.com
+ *
+ * ATmega48/88/168, ATmega16/32
+ * 
+ * Example Blink. Toggles all IO pins at 1Hz
+ */
 
-void setup() {
-	delay(1000);
+#include <avr/io.h>
+#include <util/delay.h>
+
+void init_io(void)
+{
 
 }
 
-void loop() {
+int main(void)
+{
+	init_io();
 
-	digitalWrite(13, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);                       // wait for a second
-  digitalWrite(13, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);   
-  //USB_main();
+	while (1)
+	{
+		_delay_ms(500);
+	}
 
+	return 0;
 }
