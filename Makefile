@@ -4,12 +4,9 @@ F_CPU = 16000000
 F_CLOCK = $(F_CPU)
 
 # avrdude settings
-PROGRAMMER = avr109
-# The device or COM port to which the board is connected. This might change
-# frequently.
-COM = /dev/tty.usbmodem1d11
+PROGRAMMER = usbasp
 
-AVRDUDE = avrdude -p m32u4 -P $(COM) -c $(PROGRAMMER)
+AVRDUDE = avrdude -p m32u4 -c $(PROGRAMMER)
 
 # avr-gcc options
 # Define F_CPU and F_CLOCK
@@ -30,15 +27,16 @@ CFLAGS += -fshort-enums
 CFLAGS += -fno-strict-aliasing
 CFLAGS += -Wall
 CFLAGS += -Wstrict-prototypes
+CFLAGS += -Iproj/lib/**
 
 # Compiler command
 CC = avr-gcc -mmcu=$(MCU) $(CFLAGS)
 
 # Sources and output
 OBJDIR = build
-SOURCES = $(wildcard *.c)
+SOURCES = src/$(wildcard *.c)
 OBJECTS = $(addprefix $(OBJDIR)/,$(SOURCES:.c=.o))
-TARGET = $(OBJDIR)/blinky
+TARGET = $(OBJDIR)/main
 
 # Make a build directory
 $(OBJDIR):
@@ -56,6 +54,8 @@ $(TARGET).elf: $(OBJECTS)
 $(TARGET).hex: $(TARGET).elf
 	avr-objcopy -O ihex $^ $@
 
+default: $(TARGET).hex
+	
 # Burn the firmwrare to chip.
 program: $(TARGET).hex
 	$(AVRDUDE) -U flash:w:$<
