@@ -3,9 +3,9 @@
 #include <stdint.h>
 #include <util/delay.h>
 #include <avr/pgmspace.h>
+#include <avr/io.h>
 
 // standard gnu libc library
-#include <i2cmaster.h> 
 
 #define DAC_ADDR(x) (0x18 | (x & 0x3))
 
@@ -56,19 +56,19 @@
 #define MAX580X_ID_5805 0x82
 
 /* query and report on an attached DAC */
-int max580x_init(twi_portname_t port, uint8_t addr) {
+int max580x_init(i2c_portname_t port, uint8_t addr) {
     uint8_t buf[3], n = 0;
 
     buf[0] = 0x00; 
     buf[1] = 0; 
     buf[2] = 0;
-//    twi_write_nostop(port,DAC_ADDR(addr),buf,1);
-//    twi_read_restart(port,DAC_ADDR(addr),buf,2);
+//    i2c_write_nostop(port,DAC_ADDR(addr),buf,1);
+//    i2c_read_restart(port,DAC_ADDR(addr),buf,2);
 
-    twi_start(port,DAC_ADDR(addr),twi_mode_write);
-    twi_write(port,buf,1,twi_more);
-    twi_start(port,DAC_ADDR(addr),twi_mode_read);
-    twi_read(port,buf,2,twi_stop);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_write);
+    i2c_write(port,buf,1,i2c_more);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_read);
+    i2c_read(port,buf,2,i2c_stop);
 
     /* buf should contain some interesting bytes */
 
@@ -93,10 +93,10 @@ int max580x_init(twi_portname_t port, uint8_t addr) {
     buf[1] = 0;
     buf[2] = MAX580X_CONFIG_AUX_NONE;
 
-    twi_start(port,DAC_ADDR(addr),twi_mode_write);
-    twi_write(port,buf,3,twi_more);
-    twi_start(port,DAC_ADDR(addr),twi_mode_read);
-    twi_read(port,buf,3,twi_stop);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_write);
+    i2c_write(port,buf,3,i2c_more);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_read);
+    i2c_read(port,buf,3,i2c_stop);
 
 
     /* end the gate */
@@ -104,10 +104,10 @@ int max580x_init(twi_portname_t port, uint8_t addr) {
     buf[1] = 0;
     buf[2] = 0;
 
-    twi_start(port,DAC_ADDR(addr),twi_mode_write);
-    twi_write(port,buf,3,twi_more);
-    twi_start(port,DAC_ADDR(addr),twi_mode_read);
-    twi_read(port,buf,3,twi_stop);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_write);
+    i2c_write(port,buf,3,i2c_more);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_read);
+    i2c_read(port,buf,3,i2c_stop);
 
     //console_message(0,"max580x: config (ext ref, midscale, output en");
     /* ensure reference is set to external */
@@ -115,32 +115,32 @@ int max580x_init(twi_portname_t port, uint8_t addr) {
     buf[1] = 0; 
     buf[2] = 0;
 
-    twi_start(port,DAC_ADDR(addr),twi_mode_write);
-    twi_write(port,buf,3,twi_more);
-    twi_start(port,DAC_ADDR(addr),twi_mode_read);
-    twi_read(port,buf,3,twi_stop);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_write);
+    i2c_write(port,buf,3,i2c_more);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_read);
+    i2c_read(port,buf,3,i2c_stop);
 
     /* set to mid-scale */
     //buf[0] = MAX580X_CODELOAD;
     //buf[1] = 0x80; buf[2] = 0;
-    //twi_write(port,DAC_ADDR(addr),buf,3);
+    //i2c_write(port,DAC_ADDR(addr),buf,3);
 
     /* output enable */
     buf[0] = MAX580X_POWER;
     buf[1] = 0; 
     buf[2] = MAX580X_POWER_NORMAL;
 
-    twi_start(port,DAC_ADDR(addr),twi_mode_write);
-    twi_write(port,buf,3,twi_more);
-    twi_start(port,DAC_ADDR(addr),twi_mode_read);
-    twi_read(port,buf,3,twi_stop);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_write);
+    i2c_write(port,buf,3,i2c_more);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_read);
+    i2c_read(port,buf,3,i2c_stop);
 
     buf[0] = 0xf0; /* made up value for command */
 
-    twi_start(port,DAC_ADDR(addr),twi_mode_write);
-    twi_write(port,buf,1,twi_more);
-    twi_start(port,DAC_ADDR(addr),twi_mode_read);
-    twi_read(port,buf,2,twi_stop);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_write);
+    i2c_write(port,buf,1,i2c_more);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_read);
+    i2c_read(port,buf,2,i2c_stop);
 
     //printf("max580x: status %02x %02x\r\n",buf[0],buf[1]);
 
@@ -150,7 +150,7 @@ int max580x_init(twi_portname_t port, uint8_t addr) {
 /* set the DAC value to the given 16-bit value */
 /* note: the chip will ignore bits it has no support for, so we always
  * accept and write the full 16-bit value */
-int max580x_set(twi_portname_t port, uint8_t addr, uint16_t value) {
+int max580x_set(i2c_portname_t port, uint8_t addr, uint16_t value) {
     uint8_t buf[3];
     int ret;
 
@@ -158,8 +158,8 @@ int max580x_set(twi_portname_t port, uint8_t addr, uint16_t value) {
     buf[1] = ((value & 0xff00) >> 8);
     buf[2] = (value & 0x00ff);
 
-    twi_start(port,DAC_ADDR(addr),twi_mode_write);
-    ret = twi_write(port,buf,3,twi_more);
+    i2c_start(port,DAC_ADDR(addr),i2c_mode_write);
+    ret = i2c_write(port,buf,3,i2c_more);
 
     if (ret) {
         //console_message(0,"max580x: failed DAC update");
