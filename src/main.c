@@ -5,6 +5,7 @@
 //#include <src/max5805.h>
 #include <src/i2c.h>
 
+
 void init_io(void)
 {
     DDRB = 0xff;
