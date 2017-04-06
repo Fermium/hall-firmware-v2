@@ -6,3 +6,11 @@ build-tmp/
 debug.txt
 .ycm_extra_conf.pyc
 .ropeproject
+
+main\.sym
+
+*.sym
+
+*.lss
+
+*.lst
