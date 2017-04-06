@@ -22,3 +22,5 @@ main\.sym
 *.map
 
 *.o
+
+src/\.ipynb_checkpoints/

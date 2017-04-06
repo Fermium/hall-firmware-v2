@@ -3,8 +3,8 @@
 #include <stdint.h>
 #include <math.h>
 #include <avr/io.h>
-#include <src/i2c.h>
 #include <stdbool.h>
+#include <src/i2c.h>
 
 //device i2c address
 static uint8_t address = 0x36;
@@ -78,11 +78,11 @@ int  setref(float ref_t)
  float acceptedDiff = 0.1;
  uint8_t reg_t = 0x00;
  
-if(fabsf(ref_t-2.5))
+if(fabsf(ref_t-2.5) < acceptedDiff)
   reg_t = 0x01;
-else if(fabsf(ref_t-2.048))
+else if(fabsf(ref_t-2.048) < acceptedDiff)
   reg_t = 0x02;
-else if(fabsf(ref_t-4.096))
+else if(fabsf(ref_t-4.096) < acceptedDiff)
   reg_t = 0x03;
 else
   return 1;

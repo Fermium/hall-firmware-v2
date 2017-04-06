@@ -2,9 +2,7 @@
 #include <util/delay.h>
 #include <stdbool.h>
 #include <src/pins.h>
-//#include <src/max5805.h>
-#include <src/i2c.h>
-
+#include <src/max5805.h>
 
 void init_io(void)
 {
