@@ -1,8 +1,3 @@
-#ifndef  F_CPU
-#define F_CPU 16000000UL
-#endif
-
-
 #define I2C_READ 0x01
 #define I2C_WRITE 0x00
 
