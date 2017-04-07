@@ -22,6 +22,8 @@ static float ref = 0.0;
 
 int max5805_init(uint8_t address_t)
 {
+        i2c_init();
+    
 		address = address_t;
 		//reset device
 		b[0] = 0x00;
