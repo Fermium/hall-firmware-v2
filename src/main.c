@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <src/pins.h>
 #include <src/max5805.h>
+#include <math.h>
 
 void init_io(void)
 {
@@ -22,21 +23,11 @@ int main(void)
 		init_io();
 		while (1)
 		{
-           // _delay_ms(10);
-            //PORTB = 0xff;
-            //_delay_ms(10);
-            //PORTB = 0x00;
-			/*
-            for (int i=0; i != 25; i++)
-            {
-            float cacca;
-            cacca = i*0.1;
-            max5805_codeload(cacca); 
-            _delay_ms(100);            
-            }
-            */
+           for (int i = 0; i !=360; i++)
             
-            max5805_codeload(0.5);
+               max5805_codeload(sin(i*(3.14159265 / 180.0))+1.0);
+            
+    
         }
 		return 0;
 }
