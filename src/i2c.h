@@ -1,3 +1,6 @@
+#ifndef FRM_I2C_H
+#define	FRM_I2C_H
+
 #define I2C_READ 0x01
 #define I2C_WRITE 0x00
 
@@ -145,3 +148,4 @@ void i2c_stop(void)
 	// transmit STOP condition
 	TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWSTO);
 }
+#endif

@@ -13,7 +13,6 @@ static uint8_t address = 0x36;
 //buffer register
 uint8_t b[2] = {0x00,0x00};
 
-int returncode = 0;
 
 //real reference voltage of the max5805.
 static float ref = 0.0;
@@ -22,7 +21,9 @@ static float ref = 0.0;
 
 int max5805_init(uint8_t address_t)
 {
-        i2c_init();
+  int returncode = 0;
+
+   i2c_init();
     
 		address = address_t;
 		//reset device
@@ -49,6 +50,8 @@ int max5805_init(uint8_t address_t)
 
 //enable and disable output
 int max5805_outenable(bool enable){
+  int returncode = 0;
+
 		if(enable)
 		{
 				//output normal
@@ -75,6 +78,8 @@ int max5805_outenable(bool enable){
 //external reference is not supported here
 int  max5805_setref(float ref_t)
 {
+  int returncode = 0;
+
 		float acceptedDiff = 0.1;
 		uint8_t reg_t = 0x00;
 
@@ -134,6 +139,8 @@ int  max5805_setref(float ref_t)
 
 int max5805_codeload(float input)
 {
+  int returncode = 0;
+
 	unsigned int d; ///output code
 	
     //d=(Vout*2^n)/vref
@@ -156,6 +163,8 @@ int max5805_codeload(float input)
 
 int max5805_codeloadRaw(uint16_t input)
 {
+  int returncode = 0;
+
 		//split into two bytes
         b[0] = input >> 8;
 		b[1] = input & 0xFF;

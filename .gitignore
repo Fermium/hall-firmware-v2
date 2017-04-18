@@ -24,3 +24,7 @@ main\.sym
 *.o
 
 src/\.ipynb_checkpoints/
+
+*.d
+
+*.eep

@@ -6,6 +6,7 @@
 #include <src/pins.h>
 #include <src/max5805.h>
 #include <math.h>
+#include <src/ads1115.h>
 
 void init_io(void)
 {
@@ -23,11 +24,11 @@ int main(void)
 		init_io();
 		while (1)
 		{
-           for (int i = 0; i !=360; i++)
-            
-               max5805_codeload(sin(i*(3.14159265 / 180.0))+1.0);
-            
-    
+						__delay_ms(100);
+						float voltage;
+						voltage = VoltageReadSingleEnded(ADS1115_ADDR_GND, 0, ADS1115_RANGE_4_096V);
+						max5805_codeload(voltage);		
+							 
         }
 		return 0;
 }
