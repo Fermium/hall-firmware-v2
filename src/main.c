@@ -24,7 +24,7 @@ int main(void)
 		init_io();
 		while (1)
 		{
-						__delay_ms(100);
+						_delay_ms(100);
 						float voltage;
 						voltage = VoltageReadSingleEnded(ADS1115_ADDR_GND, 0, ADS1115_RANGE_4_096V);
 						max5805_codeload(voltage);		

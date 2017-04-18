@@ -91,7 +91,7 @@ float VoltageReadSingleEnded(uint8_t address, uint8_t channel, uint8_t range) {
     i2c_writeReg(address, 0b00000001, b, 2);
     
     //is this really necessary?
-    __delay_ms(20);
+    _delay_ms(20);
     
     i2c_readReg(address, 0b00000000, b, 2);
     
