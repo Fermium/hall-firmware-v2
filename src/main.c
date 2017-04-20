@@ -3,16 +3,17 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdbool.h>
-#include <src/pins.h>
-#include <src/max5805.h>
 #include <math.h>
-#include <src/ads1115.h>
+
+#include "pins.h"
+#include "lib/adc/ads1115.h"
+#include "lib/dac/max5805.h"
 
 void init_io(void)
 {
 		DDRB = 0xff;
 		PORTB = 0x00;
-    
+
         //initialize max5805
 		max5805_init(0x36);
 		max5805_setref(2.5);
@@ -27,8 +28,8 @@ int main(void)
 						_delay_ms(100);
 						float voltage;
 						voltage = VoltageReadSingleEnded(ADS1115_ADDR_GND, 0, ADS1115_RANGE_4_096V);
-						max5805_codeload(voltage);		
-							 
+						max5805_codeload(voltage);
+
         }
 		return 0;
 }
