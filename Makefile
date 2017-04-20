@@ -51,7 +51,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC =	src/$(TARGET).c src/lib/adc/ads1115.c src/lib/i2c/i2c.c src/lib/dac/max5805.c \
+SRC =	src/main.c src/lib/adc/ads1115.c src/lib/i2c/i2c.c src/lib/dac/max5805.c \
 
 
 # MCU name, you MUST set this to match the board you are using
@@ -264,6 +264,7 @@ LDFLAGS += -Wl,--gc-sections
 LDFLAGS += $(EXTMEMOPTS)
 LDFLAGS += $(patsubst %,-L%,$(EXTRALIBDIRS))
 LDFLAGS += $(PRINTF_LIB) $(SCANF_LIB) $(MATH_LIB)
+LDFLAGS += -L ./src/lib/data-chan/Device/Bootstrap -ldatachan
 #LDFLAGS += -T linker_script.x
 
 
@@ -392,10 +393,14 @@ ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
 
 
+datachan_all:
+	make -C src/lib/data-chan/Device lib
 
+datachan_clean:
+		make -C src/lib/data-chan/Device clean
 
 # Default target.
-all: begin gccversion sizebefore build sizeafter end
+all: begin datachan_all gccversion sizebefore build sizeafter end
 
 # Change the build target to build a HEX file or a library.
 build: elf hex eep lss sym
@@ -584,7 +589,7 @@ $(OBJDIR)/%.o : %.S
 
 
 # Target: clean project.
-clean: begin clean_list end
+clean: begin clean_list datachan_clean end
 
 clean_list :
 	@echo
