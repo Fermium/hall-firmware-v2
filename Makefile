@@ -277,7 +277,7 @@ LDFLAGS += -L ./src/lib/data-chan/Device/Bootstrap -ldatachan
 #
 AVRDUDE_PROGRAMMER = usbasp
 
-AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex -U lfuse:w:0x9e:m -U hfuse:w:0x99:m -U efuse:w:0xf3:m
+AVRDUDE_WRITE_FLASH = -U flash:w:$(TARGET).hex -U lfuse:w:0x9e:m -U hfuse:w:0x99:m -U efuse:w:0xc3:m
 
 
 #AVRDUDE_WRITE_EEPROM = -U eeprom:w:$(TARGET).eep

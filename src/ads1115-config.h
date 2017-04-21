@@ -6,6 +6,12 @@
 #define ADS1115_REG_CONFIG_OS_BUSY      (0x0000)  // Read: Bit = 0 when conversion is in progress
 #define ADS1115_REG_CONFIG_OS_NOTBUSY   (0x8000)  // Read: Bit = 1 when device is not performing a conversion
 
+#define ADS1115_REG_POINTER_MASK        (0x03)
+#define ADS1115_REG_POINTER_CONVERT     (0x00)
+#define ADS1115_REG_POINTER_CONFIG      (0x01)
+#define ADS1115_REG_POINTER_LOWTHRESH   (0x02)
+#define ADS1115_REG_POINTER_HITHRESH    (0x03)
+
 #define ADS1115_REG_CONFIG_MUX_MASK     (0x7000)
 #define ADS1115_REG_CONFIG_MUX_DIFF_0_1 (0x0000)  // Differential P = AIN0, N = AIN1 (default)
 #define ADS1115_REG_CONFIG_MUX_DIFF_0_3 (0x1000)  // Differential P = AIN0, N = AIN3

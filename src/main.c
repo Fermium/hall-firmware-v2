@@ -15,6 +15,7 @@ int main(void)
 {
 		//setup of data-chan
 		main_setup();
+        io_setup();
 
 		while (1)
 		{
@@ -24,6 +25,12 @@ int main(void)
 		return 0;
 }
 
+void io_setup()
+{
+    i2c_init();
+    _delay_ms(20);
+    ads1115_config(ADS1115_ADDR_GND, 1, ADS1115_RANGE_4_096V);
+}
 
 void Process_Async(uint8_t* data) {
   /*
@@ -52,17 +59,24 @@ void Event_Init(void) {
 
 void MainRoutine(void) {
 	//_delay_ms(100);
-	float voltage;
-	/*voltage = VoltageReadSingleEnded(ADS1115_ADDR_GND, 0, ADS1115_RANGE_4_096V);
-	max5805_codeload(voltage);*/
+	//max5805_codeload(voltage);
+    
 
   // An example of measure generation :)
   if (datachan_output_enabled()) {
     measure_t* test_measure = new_nonrealtime_measure(0xFF);
+      
+    float voltage0;
+    static bool justonetime = 0;
+    if (!justonetime)
+    {
+        voltage0 = ads1115_getread();
+        justonetime = true;
+    }
+    
 
-    add_measure(test_measure, 0, 173.345);
-    add_measure(test_measure, 1, 45.5);
-    add_measure(test_measure, 2, 56.12);
+
+    add_measure(test_measure, 1, voltage0);
 
     datachan_register_measure(test_measure);
 
