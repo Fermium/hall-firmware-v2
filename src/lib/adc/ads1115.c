@@ -76,6 +76,8 @@ int ads1115_config(uint8_t address, uint8_t channel, uint8_t range)
     //b[0] = (uint8_t) (config >> 8);
     //b[1] = (uint8_t) (config & 0xFF);
     i2c_writeReg(address, ADS1115_REG_POINTER_CONFIG, config, 2);
+    
+    
 }
 
 
@@ -100,9 +102,8 @@ float ads1115_getread() {
     data = data >> 4; //From 12 bit to 16 bit
 
 */
-    float voltage = 0.0;
-    int16_t data2 = data;
-    voltage =  data2;
+    float voltage;
+    voltage = (int16_t) data;
 
     /*
     //Adjust value for voltage
@@ -128,7 +129,7 @@ float ads1115_getread() {
             break;
     }
 */
-
+    return 34.5;
     return (voltage);
 
 }
