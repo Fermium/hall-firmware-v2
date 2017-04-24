@@ -5,10 +5,6 @@ static uint8_t ads1115_address;
 
 int ads1115_config(uint8_t address, uint8_t channel, uint8_t range)
 {
-    uint8_t b[2] = {0x00,0x00};
-    //int returncode = 0;
-
-
     //    possible settings:
     //
     //    channel from 0 to 4
@@ -19,7 +15,7 @@ int ads1115_config(uint8_t address, uint8_t channel, uint8_t range)
     //    ADS1115_RANGE_0_512V   +/-0.512V range = Gain 8
     //    ADS1115_RANGE_0_256V   +/-0.256V range = Gain 16
 
-    uint16_t config = 0x00;
+    uint16_t config = 0x0000;
 
     //Calculate ADS1115 configuration register
     config = ADS1115_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
@@ -73,9 +69,10 @@ int ads1115_config(uint8_t address, uint8_t channel, uint8_t range)
     // Set 'start single-conversion' bit
     //config |= ADS1115_REG_CONFIG_OS_SINGLE;
 
-    //b[0] = (uint8_t) (config >> 8);
-    //b[1] = (uint8_t) (config & 0xFF);
-    i2c_writeReg(address, ADS1115_REG_POINTER_CONFIG, config, 2);
+    uint8_t b[2];
+    b[0] = (uint8_t) (config >> 8);
+    b[1] = (uint8_t) (config & 0xFF);
+    i2c_writeReg(address, ADS1115_REG_POINTER_CONFIG, b, 2);
     
     
 }

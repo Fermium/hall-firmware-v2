@@ -28,8 +28,16 @@ int main(void)
 void io_setup()
 {
 		i2c_init();
-		_delay_ms(20);
-		ads1115_config(ADS1115_ADDR_VDD, 1, ADS1115_RANGE_4_096V);
+		//ads1115_getread();
+		while(1){
+			//ads1115_config(ADS1115_ADDR_GND, 1, ADS1115_RANGE_4_096V);
+			//ads1115_getread();
+			//initialize max5805
+			//max5805_init(0x36);
+			max5805_setref(2.5);
+			//max5805_outenable(true);
+			_delay_ms(2000);
+		}
 }
 
 void Process_Async(uint8_t* data) {
