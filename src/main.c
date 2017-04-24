@@ -29,15 +29,6 @@ void io_setup()
 {
 		i2c_init();
 		//ads1115_getread();
-		while(1){
-			//ads1115_config(ADS1115_ADDR_GND, 1, ADS1115_RANGE_4_096V);
-			//ads1115_getread();
-			//initialize max5805
-			//max5805_init(0x36);
-			max5805_setref(2.5);
-			//max5805_outenable(true);
-			_delay_ms(2000);
-		}
 }
 
 void Process_Async(uint8_t* data) {
@@ -73,14 +64,11 @@ void MainRoutine(void) {
 		// An example of measure generation :)
 		if (datachan_output_enabled()) {
 				measure_t* test_measure = new_nonrealtime_measure(0xFF);
-				add_measure(test_measure, 1, ads1115_getread());
-				add_measure(test_measure, 2, ads1115_getread());
-				add_measure(test_measure, 3, ads1115_getread());
-				add_measure(test_measure, 4, ads1115_getread());
-				add_measure(test_measure, 5, ads1115_getread());
-				add_measure(test_measure, 6, ads1115_getread());
-				add_measure(test_measure, 7, ads1115_getread());
-				add_measure(test_measure, 8, ads1115_getread());
+				add_measure(test_measure, 1, 1.1);
+				add_measure(test_measure, 2, 1.2);
+				add_measure(test_measure, 3, 1.3);
+				add_measure(test_measure, 4, 1.4);
+
 				datachan_register_measure(test_measure);
 
 		}
