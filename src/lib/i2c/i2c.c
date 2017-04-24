@@ -124,7 +124,7 @@ uint8_t i2c_readReg(uint8_t devaddr, uint8_t regaddr, uint8_t* data, uint16_t le
 	{
 		data[i] = i2c_read_ack();
 	}
-	data[(length-1)] = i2c_read_nack();
+	data[(length-1)] = i2c_read_ack();
 
 	i2c_stop();
 

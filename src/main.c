@@ -16,7 +16,7 @@ int main(void)
 		//setup of data-chan
 		main_setup();
 		io_setup();
-
+		
 		while (1)
 		{
 				//perform usb step
@@ -27,8 +27,8 @@ int main(void)
 
 void io_setup()
 {
-		i2c_init();
-		//ads1115_getread();
+		//i2c_init();
+		
 }
 
 void Process_Async(uint8_t* data) {
@@ -56,20 +56,30 @@ void Event_Init(void) {
 		max5805_outenable(true);
 }
 
+//this routine is execute only when the device is connected
 void MainRoutine(void) {
-		//_delay_ms(100);
-		//max5805_codeload(voltage);
-
-
 		// An example of measure generation :)
+		ads1115_config(0x90, 0x01, ADS1115_RANGE_4_096V);
+		float value;
+		value = ads1115_getread();
+		
+		
 		if (datachan_output_enabled()) {
 				measure_t* test_measure = new_nonrealtime_measure(0xFF);
-				add_measure(test_measure, 1, 1.1);
+
+				//max5805_init(0x36);
+				//max5805_setref(2.5);
+				//max5805_outenable(true);
+				//_delay_ms(100);
+				
+
+				add_measure(test_measure, 1, value);
 				add_measure(test_measure, 2, 1.2);
 				add_measure(test_measure, 3, 1.3);
 				add_measure(test_measure, 4, 1.4);
 
 				datachan_register_measure(test_measure);
-
 		}
+		
+		//ads1115_getread();
 }
