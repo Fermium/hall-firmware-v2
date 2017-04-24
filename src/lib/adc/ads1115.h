@@ -1,3 +1,9 @@
+//ADS1115 library
+//Heavly adapted to the pic architecture, less abstracted i2c library
+//Partially ported from Adafruit arduino library https://github.com/adafruit/Adafruit_ADS1X15
+#ifndef ADS1115_ROUTINES_H
+#define	ADS1115_ROUTINES_H
+
 //Config register masks for ADS1115, from adafruit arduino library
 // https://github.com/adafruit/Adafruit_ADS1X15
 
@@ -76,3 +82,22 @@
 #define ADS1115_ADDR_VDD 0b10010010
 #define ADS1115_ADDR_SDA 0b10010100
 #define ADS1115_ADDR_SCL 0b10010110
+
+
+//include configuration mask registers
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <util/delay.h>
+
+#include <math.h>
+#include <avr/io.h>
+#include <stdbool.h>
+#include "../i2c/i2c.h"
+
+//Acquire voltage in single ended mode
+
+int ads1115_config(uint8_t address, uint8_t channel, uint8_t range);
+float ads1115_getread(void);
+
+#endif	/* ADS1115_ROUTINES_H */
