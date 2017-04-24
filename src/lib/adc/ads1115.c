@@ -5,7 +5,7 @@ static uint8_t ads1115_address;
 
 int ads1115_config(uint8_t address, uint8_t channel, uint8_t range)
 {
-  i2c_init();
+    i2c_init();
     //    possible settings:
     //
     //    channel from 0 to 4
@@ -92,7 +92,7 @@ float ads1115_getread() {
     float voltage;
     voltage = (int16_t) data;
 
-    
+    /*
     //Adjust value for voltage
     switch (ads1115_range) {
             //multiplier = range/4096;
@@ -115,8 +115,7 @@ float ads1115_getread() {
             voltage *= 9.375e-5;
             break;
     }
-
-
+*/
     return (voltage);
 
 }

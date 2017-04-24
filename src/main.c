@@ -59,27 +59,48 @@ void Event_Init(void) {
 //this routine is execute only when the device is connected
 void MainRoutine(void) {
 		// An example of measure generation :)
-		ads1115_config(0x90, 0x01, ADS1115_RANGE_4_096V);
-		float value;
-		value = ads1115_getread();
-		
+		float mybeautifularray[8] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+		ads1115_config(0x90, 0, ADS1115_RANGE_4_096V);
+		mybeautifularray[0] = ads1115_getread();
+
+		ads1115_config(0x90, 1, ADS1115_RANGE_4_096V);
+		mybeautifularray[1] = ads1115_getread();
+
+		ads1115_config(0x90, 2, ADS1115_RANGE_4_096V);
+		mybeautifularray[2] = ads1115_getread();
+
+		ads1115_config(0x90, 3, ADS1115_RANGE_4_096V);
+		mybeautifularray[3] = ads1115_getread();
+
+		ads1115_config(0X92, 0, ADS1115_RANGE_4_096V);
+		mybeautifularray[4] = ads1115_getread();
+
+		ads1115_config(0X92, 1, ADS1115_RANGE_4_096V);
+		mybeautifularray[5] = ads1115_getread();
+
+		ads1115_config(0X92, 2, ADS1115_RANGE_4_096V);
+		mybeautifularray[6] = ads1115_getread();
+
+		ads1115_config(0X92, 3, ADS1115_RANGE_4_096V);
+		mybeautifularray[7] = ads1115_getread();
+
 		
 		if (datachan_output_enabled()) {
 				measure_t* test_measure = new_nonrealtime_measure(0xFF);
 
-				//max5805_init(0x36);
-				//max5805_setref(2.5);
-				//max5805_outenable(true);
-				//_delay_ms(100);
-				
+				add_measure(test_measure, 1, mybeautifularray[0]);
+				add_measure(test_measure, 2, mybeautifularray[1]);
+				add_measure(test_measure, 3, mybeautifularray[2]);
+				add_measure(test_measure, 4, mybeautifularray[3]);
+				add_measure(test_measure, 5, mybeautifularray[4]);
+				add_measure(test_measure, 6, mybeautifularray[5]);
+				add_measure(test_measure, 7, mybeautifularray[6]);
+				add_measure(test_measure, 8, mybeautifularray[7]);
 
-				add_measure(test_measure, 1, value);
-				add_measure(test_measure, 2, 1.2);
-				add_measure(test_measure, 3, 1.3);
-				add_measure(test_measure, 4, 1.4);
 
 				datachan_register_measure(test_measure);
 		}
+		_delay_ms(3);
 		
 		//ads1115_getread();
 }
