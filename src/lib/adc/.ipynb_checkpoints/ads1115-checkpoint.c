@@ -1,25 +1,12 @@
-//ADS1115 library
-//Heavly adapted to the pic architecture, less abstracted i2c library
-//Partially ported from Adafruit arduino library https://github.com/adafruit/Adafruit_ADS1X15
-#ifndef ADS1115_ROUTINES_H
-#define	ADS1115_ROUTINES_H
+#include "ads1115.h"
 
-//include configuration mask registers
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <util/delay.h>
+static uint8_t ads1115_range;
+static uint8_t ads1115_address;
 
-#include <math.h>
-#include <avr/io.h>
-#include <stdbool.h>
-#include <src/i2c.h>
-#include <src/ads1115-config.h>
-
-//Acquire voltage in single ended mode
-float VoltageReadSingleEnded(uint8_t address, uint8_t channel, uint8_t range) {
+int ads1115_config(uint8_t address, uint8_t channel, uint8_t range)
+{
     uint8_t b[2] = {0x00,0x00};
-    int returncode = 0;
+    //int returncode = 0;
 
 
     //    possible settings:
@@ -32,10 +19,7 @@ float VoltageReadSingleEnded(uint8_t address, uint8_t channel, uint8_t range) {
     //    ADS1115_RANGE_0_512V   +/-0.512V range = Gain 8
     //    ADS1115_RANGE_0_256V   +/-0.256V range = Gain 16
 
-
-    float voltage = 0.0;
-    uint16_t data = 0x00;
-    uint16_t config;
+    uint16_t config = 0x00;
 
     //Calculate ADS1115 configuration register
     config = ADS1115_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
@@ -66,6 +50,9 @@ float VoltageReadSingleEnded(uint8_t address, uint8_t channel, uint8_t range) {
             config |= ADS1115_REG_CONFIG_PGA_6_144V;
             break;
     }
+    
+    ads1115_range = range;
+    ads1115_address = address;
 
     //Set acquisition channel
     switch (channel) {
@@ -86,18 +73,23 @@ float VoltageReadSingleEnded(uint8_t address, uint8_t channel, uint8_t range) {
     // Set 'start single-conversion' bit
     //config |= ADS1115_REG_CONFIG_OS_SINGLE;
 
-    b[0] = (uint8_t) (config >> 8);
-    b[1] = (uint8_t) (config & 0xFF);
-    i2c_writeReg(address, 0b00000001, b, 2);
+    //b[0] = (uint8_t) (config >> 8);
+    //b[1] = (uint8_t) (config & 0xFF);
+    i2c_writeReg(address, ADS1115_REG_POINTER_CONFIG, config, 2);
+}
+
+
+float ads1115_getread() {
     
-    //is this really necessary?
-    _delay_ms(20);
-    
-    i2c_readReg(address, 0b00000000, b, 2);
-    
-    data = b[0] << 8;
-    data |= b[1];
-    
+    uint8_t b[2] = {0x00,0x00};
+    uint16_t data = 0x00;
+
+
+    i2c_readReg(ads1115_address, ADS1115_REG_POINTER_CONVERT, data, 2);
+
+    //data = b[0] << 8;
+    //data |= b[1];
+
     /*
     data = ((uint16_t)I2CRead() << 8);
     I2CAck();
@@ -108,35 +100,35 @@ float VoltageReadSingleEnded(uint8_t address, uint8_t channel, uint8_t range) {
     data = data >> 4; //From 12 bit to 16 bit
 
 */
+    float voltage = 0.0;
+    int16_t data2 = data;
+    voltage =  data2;
 
-    voltage = (int) data;
-
+    /*
     //Adjust value for voltage
-    switch (range) {
+    switch (ads1115_range) {
             //multiplier = range/4096;
         case (ADS1115_RANGE_0_256V):
-            voltage *=1.25e-4;
+            voltage *=3.90625e-6;
             break;
         case (ADS1115_RANGE_0_512V):
             voltage *= 2.5e-4;
             break;
         case (ADS1115_RANGE_1_024V):
-            voltage *= 5e-4;
+            voltage *= 7.8125e-6;
             break;
         case (ADS1115_RANGE_2_048V):
-            voltage *= 1.0e-3;
+            voltage *= 3.125e-5;
             break;
         case (ADS1115_RANGE_4_096V):
-            voltage *= 2.00e-3;
+            voltage *= 6.25e-5;
             break;
         case (ADS1115_RANGE_6_144V):
-            voltage *= 3e-3;
+            voltage *= 9.375e-5;
             break;
     }
-
+*/
 
     return (voltage);
 
 }
-
-#endif	/* ADS1115_ROUTINES_H */

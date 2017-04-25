@@ -1,3 +1,9 @@
+//ADS1115 library
+//Heavly adapted to the pic architecture, less abstracted i2c library
+//Partially ported from Adafruit arduino library https://github.com/adafruit/Adafruit_ADS1X15
+#ifndef ADS1115_ROUTINES_H
+#define	ADS1115_ROUTINES_H
+
 //Config register masks for ADS1115, from adafruit arduino library
 // https://github.com/adafruit/Adafruit_ADS1X15
 
@@ -5,6 +11,12 @@
 #define ADS1115_REG_CONFIG_OS_SINGLE    (0x8000)  // Write: Set to start a single-conversion
 #define ADS1115_REG_CONFIG_OS_BUSY      (0x0000)  // Read: Bit = 0 when conversion is in progress
 #define ADS1115_REG_CONFIG_OS_NOTBUSY   (0x8000)  // Read: Bit = 1 when device is not performing a conversion
+
+#define ADS1115_REG_POINTER_MASK        (0x03)
+#define ADS1115_REG_POINTER_CONVERT     (0x00)
+#define ADS1115_REG_POINTER_CONFIG      (0x01)
+#define ADS1115_REG_POINTER_LOWTHRESH   (0x02)
+#define ADS1115_REG_POINTER_HITHRESH    (0x03)
 
 #define ADS1115_REG_CONFIG_MUX_MASK     (0x7000)
 #define ADS1115_REG_CONFIG_MUX_DIFF_0_1 (0x0000)  // Differential P = AIN0, N = AIN1 (default)
@@ -70,3 +82,22 @@
 #define ADS1115_ADDR_VDD 0b10010010
 #define ADS1115_ADDR_SDA 0b10010100
 #define ADS1115_ADDR_SCL 0b10010110
+
+
+//include configuration mask registers
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+#include <util/delay.h>
+
+#include <math.h>
+#include <avr/io.h>
+#include <stdbool.h>
+#include "../i2c/i2c.h"
+
+//Acquire voltage in single ended mode
+
+int ads1115_config(uint8_t address, uint8_t startch, uint8_t endch, uint8_t range);
+float ads1115_getread(uint8_t address);
+
+#endif	/* ADS1115_ROUTINES_H */
