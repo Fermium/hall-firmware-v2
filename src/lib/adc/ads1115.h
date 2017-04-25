@@ -97,7 +97,7 @@
 
 //Acquire voltage in single ended mode
 
-int ads1115_config(uint8_t address, uint8_t channel, uint8_t range);
-float ads1115_getread(void);
+int ads1115_config(uint8_t address, uint8_t startch, uint8_t endch, uint8_t range);
+float ads1115_getread(uint8_t address);
 
 #endif	/* ADS1115_ROUTINES_H */
