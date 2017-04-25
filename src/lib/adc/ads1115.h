@@ -42,7 +42,7 @@
 #define ADS1115_REG_CONFIG_MODE_CONTIN  (0x0000)  // Continuous conversion mode
 #define ADS1115_REG_CONFIG_MODE_SINGLE  (0x0100)  // Power-down single-shot mode (default)
 
-#define ADS1115_REG_CONFIG_DR_MASK      (0x00E0)  
+#define ADS1115_REG_CONFIG_DR_MASK      (0x00E0)
 #define ADS1115_REG_CONFIG_DR_128SPS    (0x0000)  // 128 samples per second
 #define ADS1115_REG_CONFIG_DR_250SPS    (0x0020)  // 250 samples per second
 #define ADS1115_REG_CONFIG_DR_490SPS    (0x0040)  // 490 samples per second
@@ -94,10 +94,21 @@
 #include <avr/io.h>
 #include <stdbool.h>
 #include "../i2c/i2c.h"
+  class ADS1115
+  {
+    private :
+      static uint8_t range=6;
+      static uint8_t address;
+      static uint8_t* gains;
+      static uint8_t startch=0;
+      static uint8_t endch=0;
+      int config(uint8_t startch,uint8_t endch);
 
-//Acquire voltage in single ended mode
-
-int ads1115_config(uint8_t address, uint8_t startch, uint8_t endch, uint8_t range);
-float ads1115_getread(uint8_t address);
-
-#endif	/* ADS1115_ROUTINES_H */
+    public  :
+      ADS1115(uint8_t address);
+      float get_se_read(uint8_t startch);
+      float get_diff_read(uint8_t startch,uint8_t endch);
+      uint8_t getaddress(){ return address; }
+      uint8_t getrange(){ return range; }
+      void setrange(uint8_t range){ this->range=range; }
+  };
