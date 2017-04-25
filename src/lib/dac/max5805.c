@@ -160,5 +160,5 @@ int  max5805_setref(float ref_t)
  		returncode = i2c_writeReg(address, 0b10100000, b, 2);
      	if (returncode != 0)
  				return 1;
-
+    return returncode;
  }

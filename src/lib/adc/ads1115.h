@@ -3,7 +3,7 @@
 //Partially ported from Adafruit arduino library https://github.com/adafruit/Adafruit_ADS1X15
 #ifndef ADS1115_ROUTINES_H
 #define	ADS1115_ROUTINES_H
-
+#endif
 //Config register masks for ADS1115, from adafruit arduino library
 // https://github.com/adafruit/Adafruit_ADS1X15
 
@@ -93,22 +93,27 @@
 #include <math.h>
 #include <avr/io.h>
 #include <stdbool.h>
-#include "../i2c/i2c.h"
+
+extern "C" {
+  #include "../i2c/i2c.h"
+}
+
   class ADS1115
   {
     private :
-      static uint8_t range=6;
-      static uint8_t address;
-      static uint8_t* gains;
-      static uint8_t startch=0;
-      static uint8_t endch=0;
+       uint8_t range;
+       uint8_t address;
+       uint8_t* gains;
+       uint8_t startch;
+       uint8_t endch;
       int config(uint8_t startch,uint8_t endch);
 
     public  :
-      ADS1115(uint8_t address);
+      ADS1115();
       float get_se_read(uint8_t startch);
       float get_diff_read(uint8_t startch,uint8_t endch);
       uint8_t getaddress(){ return address; }
+      void setaddress(uint8_t address){ this->address=address; }
       uint8_t getrange(){ return range; }
       void setrange(uint8_t range){ this->range=range; }
   };

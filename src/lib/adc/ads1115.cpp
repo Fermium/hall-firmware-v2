@@ -1,11 +1,14 @@
-#include "ads1115.h"
-
-ADS115::ADS115(uint8_t address){
-  i2c_init();
-  this->address=address;
+extern "C"{
+  #include "ads1115.h"
 }
 
-int ADS115::config(uint8_t startch,uint8_t endch){
+ADS1115::ADS1115(){
+  i2c_init();
+  this->range=6;
+  this->startch=this->endch=0;
+}
+
+int ADS1115::config(uint8_t startch,uint8_t endch){
   uint16_t config = 0x0000;
   config = ADS1115_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
        ADS1115_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
@@ -100,15 +103,15 @@ int ADS115::config(uint8_t startch,uint8_t endch){
   b[0] = (uint8_t) (config >> 8);
   b[1] = (uint8_t) (config & 0xFF);
   i2c_writeReg(address, ADS1115_REG_POINTER_CONFIG, b, 2);
+  return 0;
 }
 
 float ADS1115::get_se_read(uint8_t startch){
-  return this->get_diff_read(startch,startch)
-
+  return this->get_diff_read(startch,startch);
 }
 
 float ADS1115::get_diff_read(uint8_t startch,uint8_t endch){
-  if(startch!=this->statch || endch!=this->endch){
+  if(startch!=this->startch || endch!=this->endch){
     this->config(startch,endch);
   }
   uint8_t b[2] = {0x00,0x00};
