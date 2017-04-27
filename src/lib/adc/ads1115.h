@@ -3,7 +3,6 @@
 //Partially ported from Adafruit arduino library https://github.com/adafruit/Adafruit_ADS1X15
 #ifndef ADS1115_ROUTINES_H
 #define	ADS1115_ROUTINES_H
-#endif
 //Config register masks for ADS1115, from adafruit arduino library
 // https://github.com/adafruit/Adafruit_ADS1X15
 
@@ -51,7 +50,7 @@
 #define ADS1115_REG_CONFIG_DR_250SPS    (0x00A0)
 #define ADS1115_REG_CONFIG_DR_475SPS    (0x00C0)
 #define ADS1115_REG_CONFIG_DR_860SPS    (0x00E0)
-
+const int sp[8]={8,16,32,64,128,250,475,860};
 #define ADS1115_REG_CONFIG_CMODE_MASK   (0x0010)
 #define ADS1115_REG_CONFIG_CMODE_TRAD   (0x0000)  // Traditional comparator with hysteresis (default)
 #define ADS1115_REG_CONFIG_CMODE_WINDOW (0x0010)  // Window comparator
@@ -119,8 +118,10 @@ extern "C" {
        void setaddress(uint8_t address){ this->address=address; }
        uint8_t getrange(uint8_t channel){ return this->range[channel]; }
        void setrange(uint8_t channel,uint8_t range){ this->range[channel]=range; }
-       uint16_t getsps(){ return this->sps; }
+       uint16_t getsps(){ return sp[(this->sps>>4)/2]; }
+       uint16_t getsp(){ return (float)1/sp[(this->sps>>4)/2]*1000; }
        void setsps(uint16_t sps){ this->sps=sps; }
        uint16_t get_channel_cfg(uint8_t startch,uint8_t endch);
 
   };
+  #endif

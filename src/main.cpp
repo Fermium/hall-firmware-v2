@@ -5,6 +5,7 @@
 #include <stdbool.h>
 #include <math.h>
 #include "lib/adc/ads1115.h"
+#include "lib/scheduler/scheduler.h"
 
 extern "C"{
 	#include "pins.h"
@@ -13,11 +14,13 @@ extern "C"{
 	#include "lib/dac/max5805.h"
 	#include "lib/timer/timer1.h"
 }
-ADS1115 adc;
+ADS1115 adc1;
+ADS1115 adc2;
 
 void io_setup()
 {
-		adc.setaddress(ADS1115_ADDR_GND);
+		adc1.setaddress(ADS1115_ADDR_GND);
+		adc2.setaddress(ADS1115_ADDR_VDD);
 }
 int main(void)
 {
@@ -64,7 +67,7 @@ void Event_Init(void) {
 //this routine is execute only when the device is connected
 void MainRoutine(void) {
 		// An example of measure generation :)
-		float mybeautifularray[8] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+		//float mybeautifularray[8] = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 		/*
 		ads1115_config(0x90, 0,0, ADS1115_RANGE_4_096V);
 		mybeautifularray[0] = ads1115_getread();
@@ -79,10 +82,12 @@ void MainRoutine(void) {
 		mybeautifularray[3] = ads1115_getread();
 */
 		//ads1115_config(0X92, 0,0, ADS1115_RANGE_4_096V);
+		/*mybeautifularray[2] = adc.getsps();
+		mybeautifularray[3] = adc.getsp();
 		mybeautifularray[4] = adc.get_se_read(3);
 		mybeautifularray[5] = adc.get_diff_read(3,1);
 		mybeautifularray[6] = adc.get_diff_read(1,3);
-		mybeautifularray[7] = timer1_millis();
+		mybeautifularray[7] = timer1_millis();*/
 /*
 		ads1115_config(0X92, 1,1, ADS1115_RANGE_4_096V);
 
@@ -95,7 +100,7 @@ void MainRoutine(void) {
 */
 
 		if (datachan_output_enabled()) {
-				measure_t* test_measure = new_nonrealtime_measure(0xFF);
+				/*measure_t* test_measure = new_nonrealtime_measure(0xFF);
 
 				add_measure(test_measure, 1, mybeautifularray[0]);
 				add_measure(test_measure, 2, mybeautifularray[1]);
@@ -107,7 +112,8 @@ void MainRoutine(void) {
 				add_measure(test_measure, 8, mybeautifularray[7]);
 
 
-				datachan_register_measure(test_measure);
+				datachan_register_measure(test_measure);*/
+				start_task(&adc1,&adc2);
 		}
 		_delay_ms(3);
 

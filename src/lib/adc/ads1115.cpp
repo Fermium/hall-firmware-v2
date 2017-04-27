@@ -1,6 +1,4 @@
-extern "C"{
-  #include "ads1115.h"
-}
+#include "ads1115.h"
 
 ADS1115::ADS1115(){
   i2c_init();
@@ -8,6 +6,7 @@ ADS1115::ADS1115(){
     this->range[i]=ADS1115_RANGE_6_144V;
   }
   this->startch=this->endch=0;
+  this->sps=ADS1115_REG_CONFIG_DR_860SPS;
 }
 
 int ADS1115::config(uint8_t startch,uint8_t endch){

@@ -82,7 +82,7 @@ OBJDIR = .
 
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = src/main.cpp src/lib/adc/ads1115.cpp
+CPPSRC = src/main.cpp src/lib/adc/ads1115.cpp src/lib/scheduler/scheduler.cpp
 
 
 # List Assembler source files here.
