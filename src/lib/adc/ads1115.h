@@ -50,7 +50,7 @@
 #define ADS1115_REG_CONFIG_DR_128SPS    (0x0080)
 #define ADS1115_REG_CONFIG_DR_250SPS    (0x00A0)
 #define ADS1115_REG_CONFIG_DR_475SPS    (0x00C0)
-#define ADS1115_REG_CONFIG_DR_860SPS    (0x00E0)  
+#define ADS1115_REG_CONFIG_DR_860SPS    (0x00E0)
 
 #define ADS1115_REG_CONFIG_CMODE_MASK   (0x0010)
 #define ADS1115_REG_CONFIG_CMODE_TRAD   (0x0000)  // Traditional comparator with hysteresis (default)
@@ -79,6 +79,7 @@
 #define ADS1115_RANGE_0_512V                    (2)  // +/-0.512V range = Gain 8
 #define ADS1115_RANGE_0_256V                    (1)  // +/-0.256V range = Gain 16
 const float ADS1115_RANGE_CORRECTION[6] = {7.8125e-06, 1.5625e-05, 3.125e-05, 6.25e-05, 0.000125, 0.0001875};
+
 #define ADS1115_ADDR_GND 0b10010000
 #define ADS1115_ADDR_VDD 0b10010010
 #define ADS1115_ADDR_SDA 0b10010100
@@ -102,19 +103,24 @@ extern "C" {
   class ADS1115
   {
     private :
-       uint8_t range;
+       uint8_t range[8];
        uint8_t address;
-       uint8_t* gains;
        uint8_t startch;
        uint8_t endch;
-      int config(uint8_t startch,uint8_t endch);
+       uint16_t sps;
+       int config(uint8_t startch,uint8_t endch);
+
 
     public  :
-      ADS1115();
-      float get_se_read(uint8_t startch);
-      float get_diff_read(uint8_t startch,uint8_t endch);
-      uint8_t getaddress(){ return address; }
-      void setaddress(uint8_t address){ this->address=address; }
-      uint8_t getrange(){ return range; }
-      void setrange(uint8_t range){ this->range=range; }
+       ADS1115();
+       float get_se_read(uint8_t startch);
+       float get_diff_read(uint8_t startch,uint8_t endch);
+       uint8_t getaddress(){ return this->address; }
+       void setaddress(uint8_t address){ this->address=address; }
+       uint8_t getrange(uint8_t channel){ return this->range[channel]; }
+       void setrange(uint8_t channel,uint8_t range){ this->range[channel]=range; }
+       uint16_t getsps(){ return this->sps; }
+       void setsps(uint16_t sps){ this->sps=sps; }
+       uint16_t get_channel_cfg(uint8_t startch,uint8_t endch);
+
   };

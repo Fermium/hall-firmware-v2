@@ -4,7 +4,9 @@ extern "C"{
 
 ADS1115::ADS1115(){
   i2c_init();
-  this->range=6;
+  for(uint8_t i=0;i!=8;i++){
+    this->range[i]=ADS1115_RANGE_6_144V;
+  }
   this->startch=this->endch=0;
 }
 
@@ -16,7 +18,11 @@ int ADS1115::config(uint8_t startch,uint8_t endch){
        ADS1115_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
        ADS1115_REG_CONFIG_DR_860SPS | // 128 samples per second
        ADS1115_REG_CONFIG_MODE_CONTIN; // continuous sampling
-  switch (this->range) {
+
+  uint16_t channel_cfg = this->get_channel_cfg(startch,endch);
+  config |= channel_cfg;
+
+  switch (this->range[channel_cfg>>12]) {
     case (ADS1115_RANGE_0_256V):
       config |= ADS1115_REG_CONFIG_PGA_0_256V;
     break;
@@ -36,72 +42,12 @@ int ADS1115::config(uint8_t startch,uint8_t endch){
       config |= ADS1115_REG_CONFIG_PGA_6_144V;
     break;
   }
-  if (startch > endch)
-  {
-      uint8_t temp;
-      temp = startch;
-      startch = endch;
-      endch = temp;
-  }
-  if (startch == endch)
-  {
-      //Set acquisition channel
-      switch (startch) {
-      case (0):
-          config |= ADS1115_REG_CONFIG_MUX_SINGLE_0;
-          break;
-      case (1):
-          config |= ADS1115_REG_CONFIG_MUX_SINGLE_1;
-          break;
-      case (2):
-          config |= ADS1115_REG_CONFIG_MUX_SINGLE_2;
-          break;
-      case (3):
-          config |= ADS1115_REG_CONFIG_MUX_SINGLE_3;
-          break;
-      default:
-          return 1;
-          break;
-      }
-  }
-  else
-  {
-      if (endch == 1)
-      {
-          if (startch == 0)
-          {
-              config |= ADS1115_REG_CONFIG_MUX_DIFF_0_1;
-          }
-          else
-          {
-              return 1;
-          }
-      }
-      else if (endch == 3)
-      {
-          switch (startch) {
-          case (0):
-              config |= ADS1115_REG_CONFIG_MUX_DIFF_0_3;
-              break;
-          case (1):
-              config |= ADS1115_REG_CONFIG_MUX_DIFF_1_3;
-              break;
-          case (2):
-              config |= ADS1115_REG_CONFIG_MUX_DIFF_2_3;
-              break;
-          default:
-              return 1;
-              break;
-          }
-      } else
-      {
-          return 1;
-      }
 
-  }
+
   uint8_t b[2];
   b[0] = (uint8_t) (config >> 8);
   b[1] = (uint8_t) (config & 0xFF);
+
   i2c_writeReg(address, ADS1115_REG_POINTER_CONFIG, b, 2);
   return 0;
 }
@@ -114,8 +60,11 @@ float ADS1115::get_diff_read(uint8_t startch,uint8_t endch){
   if(startch!=this->startch || endch!=this->endch){
     this->config(startch,endch);
   }
+
   int8_t sgn = (startch>endch) ? -1 : 1;
+
   _delay_ms(5);
+
   uint8_t b[2] = {0x00,0x00};
   i2c_readReg(this->address, ADS1115_REG_POINTER_CONVERT, b, 2);
 
@@ -126,9 +75,78 @@ float ADS1115::get_diff_read(uint8_t startch,uint8_t endch){
   float voltage;
   voltage = data;
 
-  voltage*=ADS1115_RANGE_CORRECTION[this->range-1];
+  voltage *= ADS1115_RANGE_CORRECTION[this->range[this->get_channel_cfg(startch,endch)>>12]-1];
   voltage *= sgn;
 
   return (voltage);
 
+}
+
+
+uint16_t ADS1115::get_channel_cfg(uint8_t startch,uint8_t endch){
+  uint16_t ch = 0x0000;
+  if (startch > endch)
+  {
+      uint8_t temp;
+      temp = startch;
+      startch = endch;
+      endch = temp;
+  }
+  if (startch == endch)
+  {
+      //Set acquisition channel
+      switch (startch) {
+      case (0):
+          ch |= ADS1115_REG_CONFIG_MUX_SINGLE_0;
+          break;
+      case (1):
+          ch |= ADS1115_REG_CONFIG_MUX_SINGLE_1;
+          break;
+      case (2):
+          ch |= ADS1115_REG_CONFIG_MUX_SINGLE_2;
+          break;
+      case (3):
+          ch |= ADS1115_REG_CONFIG_MUX_SINGLE_3;
+          break;
+      default:
+          return 1;
+          break;
+      }
+  }
+  else
+  {
+      if (endch == 1)
+      {
+          if (startch == 0)
+          {
+              ch |= ADS1115_REG_CONFIG_MUX_DIFF_0_1;
+          }
+          else
+          {
+              return 1;
+          }
+      }
+      else if (endch == 3)
+      {
+          switch (startch) {
+          case (0):
+              ch |= ADS1115_REG_CONFIG_MUX_DIFF_0_3;
+              break;
+          case (1):
+              ch |= ADS1115_REG_CONFIG_MUX_DIFF_1_3;
+              break;
+          case (2):
+              ch |= ADS1115_REG_CONFIG_MUX_DIFF_2_3;
+              break;
+          default:
+              return 1;
+              break;
+          }
+      } else
+      {
+          return 1;
+      }
+
+  }
+  return ch;
 }

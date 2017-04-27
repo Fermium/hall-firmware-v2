@@ -18,7 +18,6 @@ ADS1115 adc;
 void io_setup()
 {
 		adc.setaddress(ADS1115_ADDR_GND);
-		adc.setrange(ADS1115_RANGE_4_096V);
 }
 int main(void)
 {
