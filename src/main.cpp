@@ -17,7 +17,7 @@ extern "C"{
 }
 ADS1115 adc1;
 ADS1115 adc2;
-HEATER heater(0x0C,6);
+HEATER heater(0x0C,6,255);
 void io_setup()
 {
 		adc1.setaddress(ADS1115_ADDR_GND);
