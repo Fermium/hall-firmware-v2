@@ -51,7 +51,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC =	src/lib/i2c/i2c.c src/lib/dac/max5805.c src/lib/timer/timer1.c \
+SRC =	src/lib/i2c/i2c.c src/lib/dac/max5805.c src/lib/timer/timer1.c src/lib/pins/pins.c \
 
 
 # MCU name, you MUST set this to match the board you are using
@@ -82,7 +82,7 @@ OBJDIR = .
 
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = src/main.cpp src/lib/adc/ads1115.cpp src/lib/scheduler/scheduler.cpp
+CPPSRC = src/main.cpp src/lib/adc/ads1115.cpp src/lib/scheduler/scheduler.cpp src/lib/heater/heater.cpp
 
 
 # List Assembler source files here.

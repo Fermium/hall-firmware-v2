@@ -11,11 +11,12 @@
 	  #include "../data-chan/Device/Bootstrap/Custom.h"
   }
   #include "../adc/ads1115.h"
+  #include "../heater/heater.h"
 
   #define NUMBER_OF_TASKS 4
 
 
-  void start_task(ADS1115*,ADS1115*);
+  void start_task(ADS1115*,ADS1115*,HEATER*);
 
   //tasks
   int task0(unsigned long, unsigned long);

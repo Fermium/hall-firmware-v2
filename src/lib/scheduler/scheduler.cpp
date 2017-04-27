@@ -4,11 +4,12 @@ static measure_t* measure;
 static bool measure_ready=false;
 static ADS1115* adc1;
 static ADS1115* adc2;
-
-void start_task(ADS1115* Adc1,ADS1115* Adc2){
+static HEATER* heater;
+void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat){
   //unsigned long task = timer1_millis() % 8;
  adc1=Adc1;
  adc2=Adc2;
+ heater=heat;
  static unsigned long executionCycleCounter = 0;
  executionCycleCounter ++;
 
@@ -73,7 +74,7 @@ void start_task(ADS1115* Adc1,ADS1115* Adc2){
 int task0(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
   static uint8_t lastRead=0;
-  if(fromLastExecution<fmax(adc1->getsp(),adc2->getsp())){
+  if(fromLastExecution<fmax(adc1->getsp(),adc2->getsp())&&heater->time_to_transition()<4){
     return 2;
   }
   if(lastRead==0){
@@ -104,7 +105,10 @@ int task1(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 int task2(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
 
+  heater->evaluate();
+
 }
+
 
 int task3(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
