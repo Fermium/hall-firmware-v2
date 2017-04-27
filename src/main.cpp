@@ -11,6 +11,7 @@ extern "C"{
 	#include "lib/data-chan/Device/Bootstrap/main.h"
 	#include "lib/data-chan/Device/Bootstrap/Custom.h"
 	#include "lib/dac/max5805.h"
+	#include "lib/timer/timer1.h"
 }
 ADS1115 adc;
 
@@ -24,6 +25,7 @@ int main(void)
 		//setup of data-chan
 		main_setup();
 		io_setup();
+		timer1_init();
 
 		while (1)
 		{
@@ -78,11 +80,13 @@ void MainRoutine(void) {
 		mybeautifularray[3] = ads1115_getread();
 */
 		//ads1115_config(0X92, 0,0, ADS1115_RANGE_4_096V);
-
 		mybeautifularray[4] = adc.get_se_read(3);
+		mybeautifularray[5] = adc.get_diff_read(3,1);
+		mybeautifularray[6] = adc.get_diff_read(1,3);
+		mybeautifularray[7] = timer1_millis();
 /*
 		ads1115_config(0X92, 1,1, ADS1115_RANGE_4_096V);
-		mybeautifularray[5] = ads1115_getread();
+
 
 		ads1115_config(0X92, 2,2, ADS1115_RANGE_4_096V);
 		mybeautifularray[6] = ads1115_getread();

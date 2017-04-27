@@ -51,7 +51,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC =	src/lib/i2c/i2c.c src/lib/dac/max5805.c \
+SRC =	src/lib/i2c/i2c.c src/lib/dac/max5805.c src/lib/timer/timer1.c \
 
 
 # MCU name, you MUST set this to match the board you are using

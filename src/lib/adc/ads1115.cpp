@@ -14,7 +14,7 @@ int ADS1115::config(uint8_t startch,uint8_t endch){
        ADS1115_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
        ADS1115_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
        ADS1115_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
-       ADS1115_REG_CONFIG_DR_128SPS | // 128 samples per second
+       ADS1115_REG_CONFIG_DR_860SPS | // 128 samples per second
        ADS1115_REG_CONFIG_MODE_CONTIN; // continuous sampling
   switch (this->range) {
     case (ADS1115_RANGE_0_256V):
@@ -114,6 +114,8 @@ float ADS1115::get_diff_read(uint8_t startch,uint8_t endch){
   if(startch!=this->startch || endch!=this->endch){
     this->config(startch,endch);
   }
+  int8_t sgn = (startch>endch) ? -1 : 1;
+  _delay_ms(5);
   uint8_t b[2] = {0x00,0x00};
   i2c_readReg(this->address, ADS1115_REG_POINTER_CONVERT, b, 2);
 
@@ -124,36 +126,9 @@ float ADS1115::get_diff_read(uint8_t startch,uint8_t endch){
   float voltage;
   voltage = data;
 
-  /*
-     //Adjust value for voltage
-     switch (ads1115_range) {
-          //multiplier = range/2^16;
-      case (ADS1115_RANGE_0_256V):
-          voltage *=3.90625e-6;
-          voltage *=2;
-          break;
-      case (ADS1115_RANGE_0_512V):
-          voltage *= 2.5e-4;
-          voltage *=2;
-          break;
-      case (ADS1115_RANGE_1_024V):
-          voltage *= 7.8125e-6;
-          voltage *=2;
-          break;
-      case (ADS1115_RANGE_2_048V):
-          voltage *= 3.125e-5;
-          voltage *=2;
-          break;
-      case (ADS1115_RANGE_4_096V):
-          voltage *= 6.25e-5;
-          voltage *=2;
-          break;
-      case (ADS1115_RANGE_6_144V):
-          voltage *= 9.375e-5;
-          voltage *=2;
-          break;
-     }
-   */
+  voltage*=ADS1115_RANGE_CORRECTION[this->range-1];
+  voltage *= sgn;
+
   return (voltage);
 
 }

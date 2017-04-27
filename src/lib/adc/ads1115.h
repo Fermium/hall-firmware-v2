@@ -43,13 +43,14 @@
 #define ADS1115_REG_CONFIG_MODE_SINGLE  (0x0100)  // Power-down single-shot mode (default)
 
 #define ADS1115_REG_CONFIG_DR_MASK      (0x00E0)
-#define ADS1115_REG_CONFIG_DR_128SPS    (0x0000)  // 128 samples per second
-#define ADS1115_REG_CONFIG_DR_250SPS    (0x0020)  // 250 samples per second
-#define ADS1115_REG_CONFIG_DR_490SPS    (0x0040)  // 490 samples per second
-#define ADS1115_REG_CONFIG_DR_920SPS    (0x0060)  // 920 samples per second
-#define ADS1115_REG_CONFIG_DR_1600SPS   (0x0080)  // 1600 samples per second (default)
-#define ADS1115_REG_CONFIG_DR_2400SPS   (0x00A0)  // 2400 samples per second
-#define ADS1115_REG_CONFIG_DR_3300SPS   (0x00C0)  // 3300 samples per second
+#define ADS1115_REG_CONFIG_DR_8SPS      (0x0000)
+#define ADS1115_REG_CONFIG_DR_16SPS     (0x0020)
+#define ADS1115_REG_CONFIG_DR_32SPS     (0x0040)
+#define ADS1115_REG_CONFIG_DR_64SPS     (0x0060)
+#define ADS1115_REG_CONFIG_DR_128SPS    (0x0080)
+#define ADS1115_REG_CONFIG_DR_250SPS    (0x00A0)
+#define ADS1115_REG_CONFIG_DR_475SPS    (0x00C0)
+#define ADS1115_REG_CONFIG_DR_860SPS    (0x00E0)  
 
 #define ADS1115_REG_CONFIG_CMODE_MASK   (0x0010)
 #define ADS1115_REG_CONFIG_CMODE_TRAD   (0x0000)  // Traditional comparator with hysteresis (default)
@@ -77,7 +78,7 @@
 #define ADS1115_RANGE_1_024V                    (3)  // +/-1.024V range = Gain 4
 #define ADS1115_RANGE_0_512V                    (2)  // +/-0.512V range = Gain 8
 #define ADS1115_RANGE_0_256V                    (1)  // +/-0.256V range = Gain 16
-
+const float ADS1115_RANGE_CORRECTION[6] = {7.8125e-06, 1.5625e-05, 3.125e-05, 6.25e-05, 0.000125, 0.0001875};
 #define ADS1115_ADDR_GND 0b10010000
 #define ADS1115_ADDR_VDD 0b10010010
 #define ADS1115_ADDR_SDA 0b10010100
