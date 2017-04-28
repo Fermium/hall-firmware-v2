@@ -47,6 +47,18 @@ void Process_Async(uint8_t* data) {
 		/*
 		   data is the content of the packet minus the CRC, the CMD_ASYNC_RESPONSE,
 		   and the ID.... so data have (GENERIC_REPORT_SIZE - 1 - 4) size
+			 il primo byte è il comando (il famoso 0-255 del comando, verificare perchè alcuni potrebbero essere usati, ma probabilmente solo gli ultimi)
+			 
+			 tutti gli altri byte sono il payload
+			 
+			 per l'host leggere qua https://github.com/NeroReflex/data-chan/blob/master/Host/commands.c
+			 void datachan_send_async_command(datachan_device_t* dev, uint8_t cmdType, uint8_t *cmdBuf, uint8_t cmdBufLength)
+			 cdmBuf è il payload da inviare, max (GENERIC_REPORT_SIZE - 1 - 4)
+			 cmdType è numero che identifica il tipo di comando
+			 cmdBufLength è la lunghezza del buffer per evitare casini
+
+
+			 
 		 */
 }
 
