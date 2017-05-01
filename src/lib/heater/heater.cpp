@@ -36,5 +36,5 @@ void HEATER::disable(){
 int HEATER::time_to_transition(){
 
   int t = (timer1_millis()/this->full_cycle_ms) % full_scale;
-  return fmin(fabs(t-this->duty_cycle),fmin(t,full_scale-t))*4;
+  return fmin(fabs(t-this->duty_cycle),fmin(t,full_scale-t))*this->full_cycle_ms;
 }

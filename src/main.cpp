@@ -1,5 +1,4 @@
 #define F_CPU 16000000UL
-
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdbool.h>
@@ -7,6 +6,7 @@
 #include "lib/adc/ads1115.h"
 #include "lib/heater/heater.h"
 #include "lib/scheduler/scheduler.h"
+#include "lib/commands/commands.h"
 
 extern "C"{
 	#include "lib/pins/pins.h"
@@ -15,6 +15,7 @@ extern "C"{
 	#include "lib/dac/max5805.h"
 	#include "lib/timer/timer1.h"
 }
+
 ADS1115 adc1;
 ADS1115 adc2;
 HEATER heater(0x0C,6,255);
@@ -43,14 +44,14 @@ int main(void)
 
 
 
-void Process_Async(uint8_t* data) {
+void Process_Async(uint8_t* inData,uint8_t* outData) {
 		/*
 		   data is the content of the packet minus the CRC, the CMD_ASYNC_RESPONSE,
 		   and the ID.... so data have (GENERIC_REPORT_SIZE - 1 - 4) size
 			 il primo byte è il comando (il famoso 0-255 del comando, verificare perchè alcuni potrebbero essere usati, ma probabilmente solo gli ultimi)
-			 
+
 			 tutti gli altri byte sono il payload
-			 
+
 			 per l'host leggere qua https://github.com/NeroReflex/data-chan/blob/master/Host/commands.c
 			 void datachan_send_async_command(datachan_device_t* dev, uint8_t cmdType, uint8_t *cmdBuf, uint8_t cmdBufLength)
 			 cdmBuf è il payload da inviare, max (GENERIC_REPORT_SIZE - 1 - 4)
@@ -58,8 +59,42 @@ void Process_Async(uint8_t* data) {
 			 cmdBufLength è la lunghezza del buffer per evitare casini
 
 
-			 
+
 		 */
+		 uint8_t* pointer = inData;
+		 uint8_t command;
+		 memcpy(&command,pointer,sizeof(uint8_t));
+		 pointer++;
+
+		 switch(command){
+
+			 case 0x01:
+			 	float state;
+				memcpy(&state,pointer,sizeof(float));
+				set_current_output(state);
+			 	break;
+
+			 case 0x02:
+			 	uint8_t power;
+				memcpy(&power,pointer,sizeof(uint8_t));
+				heater.set_duty_cycle(power);
+				set_heater_state(&heater,power);
+			 	break;
+
+			 case 0x03:
+				uint8_t channel,gain;
+				memcpy(&channel,pointer,sizeof(uint8_t));
+				pointer++;
+				memcpy(&gain,pointer,sizeof(uint8_t));
+				if(channel/8 == 0){
+					set_channel_gain(&adc1,channel%8,gain);
+				}
+				else{
+					set_channel_gain(&adc2,channel%8,gain);
+				}
+			 	break;
+		 }
+
 }
 
 void Event_Connected(void) {

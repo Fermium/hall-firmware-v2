@@ -1,15 +1,16 @@
 #ifndef COMMANDS_H
 
   #define COMMANDS_H
-  #include <datachan.h>
   #include <stdint.h>
   #include <stdbool.h>
+  extern "C" {
+    #include "../dac/max5805.h"
+  }
+  #include "../heater/heater.h"
+  #include "../adc/ads1115.h"
 
-
-
-  float get_current();
-  bool set_current_output_state(bool);
-  bool set_heater_state(uint8_t);
-  bool set_channel_gain(uint8_t,float);
+  void set_current_output(float);
+  void set_heater_state(HEATER*,uint8_t);
+  void set_channel_gain(ADS1115*,uint8_t,uint8_t);
 
 #endif //COMMANDS_H
