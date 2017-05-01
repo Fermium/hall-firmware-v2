@@ -2,11 +2,11 @@
 
 
 void set_current_output(float current){
-  if(current<0.0006){
+  if(fabs(current)<0.0006){
     max5805_set_to_middlescale(0x36);
   }
   else{
-    max5805_codeload(current);
+    max5805_codeload(current/2.5+0.5*max5805_getref());
   }
 }
 

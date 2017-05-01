@@ -118,6 +118,9 @@ int  max5805_setref(float ref_t)
 		return 0;
 }
 
+float max5805_getref(){
+  return ref;
+}
 /*
    {
    float getref()

@@ -18,7 +18,7 @@ int max5805_set_to_middlescale(uint8_t address_t);
 //nearest value will be choosen by 100mV margin
 //external reference is not supported here
 int  max5805_setref(float ref_t);
-
+float  max5805_getref();
 
 
 int max5805_codeload(float input);

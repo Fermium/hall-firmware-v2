@@ -3,6 +3,7 @@
   #define COMMANDS_H
   #include <stdint.h>
   #include <stdbool.h>
+  #include <math.h>
   extern "C" {
     #include "../dac/max5805.h"
   }
