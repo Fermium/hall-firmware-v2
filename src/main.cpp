@@ -6,6 +6,7 @@
 #include "lib/adc/ads1115.h"
 #include "lib/heater/heater.h"
 #include "lib/scheduler/scheduler.h"
+#include "lib/led/led.h"
 #include "lib/commands/commands.h"
 
 extern "C"{
@@ -19,6 +20,7 @@ extern "C"{
 ADS1115 adc1;
 ADS1115 adc2;
 HEATER heater(0x0C,6,255);
+LED led(0x0B,0,255);
 void io_setup()
 {
 		adc1.setaddress(ADS1115_ADDR_GND);
@@ -26,6 +28,10 @@ void io_setup()
 		heater.set_duty_cycle(200);
 		heater.set_period(1020);//2000ms
 		heater.enable();
+		/*led.enable();
+		led.set_duty_cycle(200);
+		led.set_period(1020);//2000ms*/
+		ddrwrite(0x0B,0,DDR_OUTPUT);
 }
 int main(void)
 {
