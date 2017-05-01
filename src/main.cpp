@@ -23,6 +23,10 @@ HEATER heater(0x0C,6,255);
 LED led(0x0B,0,255);
 void io_setup()
 {
+		//initialize max5805
+		max5805_init(0x36);
+		max5805_setref(2.5);
+		max5805_outenable(true);
 		adc1.setaddress(ADS1115_ADDR_GND);
 		adc2.setaddress(ADS1115_ADDR_VDD);
 		heater.set_duty_cycle(200);
@@ -31,15 +35,14 @@ void io_setup()
 		/*led.enable();
 		led.set_duty_cycle(200);
 		led.set_period(1020);//2000ms*/
-		ddrwrite(0x0B,0,DDR_OUTPUT);
 }
 int main(void)
 {
 
 		//setup of data-chan
 		main_setup();
-		io_setup();
 		timer1_init();
+		io_setup();
 		while (1)
 		{
 				//perform usb step
@@ -104,20 +107,14 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 }
 
 void Event_Connected(void) {
-
+	io_setup();
 }
 
 void Event_Disconnected(void) {
-
+	io_setup();
 }
 
 void Event_Init(void) {
-
-
-		//initialize max5805
-		max5805_init(0x36);
-		max5805_setref(2.5);
-		max5805_outenable(true);
 }
 
 //this routine is execute only when the device is connected
@@ -125,6 +122,4 @@ void MainRoutine(void) {
 	if (datachan_output_enabled()) {
 				start_task(&adc1,&adc2,&heater);
 		}
-		_delay_ms(3);
-
 }
