@@ -81,7 +81,7 @@ int task0(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
     measure=new_nonrealtime_measure(0xFF);
   }
   if(lastRead<4){
-    add_measure(measure,lastRead+1,adc1->get_se_read(lastRead));
+  add_measure(measure,lastRead+1,adc1->get_se_read(lastRead));
   }
   else{
     add_measure(measure,lastRead+1,adc2->get_se_read(lastRead-4));

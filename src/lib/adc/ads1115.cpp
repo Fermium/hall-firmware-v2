@@ -149,3 +149,43 @@ uint16_t ADS1115::get_channel_cfg(uint8_t startch,uint8_t endch){
   }
   return ch;
 }
+
+
+uint8_t* ADS1115::get_channels(uint16_t channel){
+  uint8_t ch[2]={0};
+  switch (channel) {
+    case 0:
+      ch[0]=0;
+      ch[1]=1;
+    break;
+    case 1:
+      ch[0]=0;
+      ch[1]=3;
+    break;
+    case 2:
+      ch[0]=1;
+      ch[1]=3;
+    break;
+    case 3:
+      ch[0]=2;
+      ch[1]=3;
+    break;
+    case 4:
+      ch[0]=0;
+      ch[1]=0;
+    break;
+    case 5:
+      ch[0]=1;
+      ch[1]=1;
+    break;
+    case 6:
+      ch[0]=2;
+      ch[1]=2;
+    break;
+    case 7:
+      ch[0]=3;
+      ch[1]=3;
+    break;
+  }
+  return ch;
+}

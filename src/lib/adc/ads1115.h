@@ -117,11 +117,12 @@ extern "C" {
        uint8_t getaddress(){ return this->address; }
        void setaddress(uint8_t address){ this->address=address; }
        uint8_t getrange(uint8_t channel){ return this->range[channel]; }
-       void setrange(uint8_t channel,uint8_t range){ this->range[channel]=range; }
+       void setrange(uint8_t channel,uint8_t range){ this->range[channel]=range;uint8_t* ch=get_channels(channel); this->config(ch[0],ch[1]); }
        uint16_t getsps(){ return sp[(this->sps>>4)/2]; }
        uint16_t getsp(){ return (float)1/sp[(this->sps>>4)/2]*1000; }
        void setsps(uint16_t sps){ this->sps=sps; }
        uint16_t get_channel_cfg(uint8_t startch,uint8_t endch);
+       uint8_t* get_channels(uint16_t channel);
 
   };
   #endif
