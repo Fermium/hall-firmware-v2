@@ -3,7 +3,7 @@
 ADS1115::ADS1115(){
   i2c_init();
   for(uint8_t i=0;i!=8;i++){
-    this->range[i]=ADS1115_RANGE_6_144V;
+    this->range[i]=ADS1115_RANGE_4_096V;
   }
   this->startch=this->endch=0;
   this->sps=ADS1115_REG_CONFIG_DR_860SPS;
@@ -56,13 +56,10 @@ float ADS1115::get_se_read(uint8_t startch){
 }
 
 float ADS1115::get_diff_read(uint8_t startch,uint8_t endch){
-  if(startch!=this->startch || endch!=this->endch){
-    this->config(startch,endch);
-  }
-
+  this->config(startch,endch);
   int8_t sgn = (startch>endch) ? -1 : 1;
 
-  _delay_ms(5);
+  _delay_ms(15);
 
   uint8_t b[2] = {0x00,0x00};
   i2c_readReg(this->address, ADS1115_REG_POINTER_CONVERT, b, 2);

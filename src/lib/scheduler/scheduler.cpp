@@ -80,14 +80,12 @@ int task0(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
   if(lastRead==0){
     measure=new_nonrealtime_measure(0xFF);
   }
-  if(lastRead<4){
-  add_measure(measure,lastRead+1,adc1->get_se_read(lastRead));
-  }
-  else{
-    add_measure(measure,lastRead+1,adc2->get_se_read(lastRead-4));
-  }
-  measure_ready=lastRead==7;
-  lastRead=(lastRead+1)%8 ;
+  _delay_ms(10);
+  add_measure(measure,lastRead+1,adc1->get_diff_read(lastRead,3));
+  _delay_ms(10);
+  add_measure(measure,lastRead+5,adc2->get_diff_read(lastRead,3));
+  measure_ready=lastRead==3;
+  lastRead=(lastRead+1)%4;
   return 0;
 }
 
