@@ -84,8 +84,8 @@ int task0(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
   add_measure(measure,lastRead+1,adc1->get_diff_read(lastRead,3));
   _delay_ms(10);
   add_measure(measure,lastRead+5,adc2->get_diff_read(lastRead,3));
-  measure_ready=lastRead==3;
-  lastRead=(lastRead+1)%4;
+  measure_ready=lastRead==2;
+  lastRead=(lastRead+1)%3;
   return 0;
 }
 
