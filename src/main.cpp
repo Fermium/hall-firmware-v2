@@ -45,12 +45,12 @@ void io_setup()
 		max5805_outenable(true);
 		adc1.setaddress(ADS1115_ADDR_GND);
 		adc2.setaddress(ADS1115_ADDR_VDD);
-		heater.set_duty_cycle(200);
+		heater.set_duty_cycle(0);
 		heater.set_period(1020);//2000ms
 		heater.enable();
-		/*led.enable();
-		led.set_duty_cycle(200);
-		led.set_period(1020);//2000ms*/
+		led.enable();
+		led.set_duty_cycle(0);
+		led.set_period(1020);//2000ms
 }
 int main(void)
 {
@@ -118,6 +118,9 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 					set_channel_gain(&adc2,channel%8,gain);
 				}
 			 	break;
+
+				case 0x04:
+ 				io_setup();
 		 }
 
 }
@@ -127,6 +130,7 @@ void Event_Connected(void) {
 }
 
 void Event_Disconnected(void) {
+	// reset to avoid things burning up
 	io_setup();
 }
 
