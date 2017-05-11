@@ -3,7 +3,6 @@
 //Partially ported from Adafruit arduino library https://github.com/adafruit/Adafruit_ADS1X15
 #ifndef ADS1115_ROUTINES_H
 #define	ADS1115_ROUTINES_H
-
 //Config register masks for ADS1115, from adafruit arduino library
 // https://github.com/adafruit/Adafruit_ADS1X15
 
@@ -42,15 +41,16 @@
 #define ADS1115_REG_CONFIG_MODE_CONTIN  (0x0000)  // Continuous conversion mode
 #define ADS1115_REG_CONFIG_MODE_SINGLE  (0x0100)  // Power-down single-shot mode (default)
 
-#define ADS1115_REG_CONFIG_DR_MASK      (0x00E0)  
-#define ADS1115_REG_CONFIG_DR_128SPS    (0x0000)  // 128 samples per second
-#define ADS1115_REG_CONFIG_DR_250SPS    (0x0020)  // 250 samples per second
-#define ADS1115_REG_CONFIG_DR_490SPS    (0x0040)  // 490 samples per second
-#define ADS1115_REG_CONFIG_DR_920SPS    (0x0060)  // 920 samples per second
-#define ADS1115_REG_CONFIG_DR_1600SPS   (0x0080)  // 1600 samples per second (default)
-#define ADS1115_REG_CONFIG_DR_2400SPS   (0x00A0)  // 2400 samples per second
-#define ADS1115_REG_CONFIG_DR_3300SPS   (0x00C0)  // 3300 samples per second
-
+#define ADS1115_REG_CONFIG_DR_MASK      (0x00E0)
+#define ADS1115_REG_CONFIG_DR_8SPS      (0x0000)
+#define ADS1115_REG_CONFIG_DR_16SPS     (0x0020)
+#define ADS1115_REG_CONFIG_DR_32SPS     (0x0040)
+#define ADS1115_REG_CONFIG_DR_64SPS     (0x0060)
+#define ADS1115_REG_CONFIG_DR_128SPS    (0x0080)
+#define ADS1115_REG_CONFIG_DR_250SPS    (0x00A0)
+#define ADS1115_REG_CONFIG_DR_475SPS    (0x00C0)
+#define ADS1115_REG_CONFIG_DR_860SPS    (0x00E0)
+const int sp[8]={8,16,32,64,128,250,475,860};
 #define ADS1115_REG_CONFIG_CMODE_MASK   (0x0010)
 #define ADS1115_REG_CONFIG_CMODE_TRAD   (0x0000)  // Traditional comparator with hysteresis (default)
 #define ADS1115_REG_CONFIG_CMODE_WINDOW (0x0010)  // Window comparator
@@ -77,6 +77,7 @@
 #define ADS1115_RANGE_1_024V                    (3)  // +/-1.024V range = Gain 4
 #define ADS1115_RANGE_0_512V                    (2)  // +/-0.512V range = Gain 8
 #define ADS1115_RANGE_0_256V                    (1)  // +/-0.256V range = Gain 16
+const float ADS1115_RANGE_CORRECTION[6] = {7.8125e-06, 1.5625e-05, 3.125e-05, 6.25e-05, 0.000125, 0.0001875};
 
 #define ADS1115_ADDR_GND 0b10010000
 #define ADS1115_ADDR_VDD 0b10010010
@@ -93,11 +94,35 @@
 #include <math.h>
 #include <avr/io.h>
 #include <stdbool.h>
-#include "../i2c/i2c.h"
 
-//Acquire voltage in single ended mode
+extern "C" {
+  #include "../i2c/i2c.h"
+}
 
-int ads1115_config(uint8_t address, uint8_t startch, uint8_t endch, uint8_t range);
-float ads1115_getread(uint8_t address);
+  class ADS1115
+  {
+    private :
+       uint8_t range[8];
+       uint8_t address;
+       uint8_t startch;
+       uint8_t endch;
+       uint16_t sps;
+       int config(uint8_t startch,uint8_t endch);
 
-#endif	/* ADS1115_ROUTINES_H */
+
+    public  :
+       ADS1115();
+       float get_se_read(uint8_t startch);
+       float get_diff_read(uint8_t startch,uint8_t endch);
+       uint8_t getaddress(){ return this->address; }
+       void setaddress(uint8_t address){ this->address=address; }
+       uint8_t getrange(uint8_t channel){ return this->range[channel]; }
+       void setrange(uint8_t channel,uint8_t range){ this->range[channel]=range;uint8_t* ch=get_channels(channel); this->config(ch[0],ch[1]); }
+       uint16_t getsps(){ return sp[(this->sps>>4)/2]; }
+       uint16_t getsp(){ return (float)1/sp[(this->sps>>4)/2]*1000; }
+       void setsps(uint16_t sps){ this->sps=sps; }
+       uint16_t get_channel_cfg(uint8_t startch,uint8_t endch);
+       uint8_t* get_channels(uint16_t channel);
+
+  };
+  #endif

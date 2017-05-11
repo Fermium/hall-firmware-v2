@@ -23,10 +23,11 @@ main\.sym
 
 *.o
 
-src/\.ipynb_checkpoints/
+**/.ipynb_checkpoints/
 
 *.d
 
 *.eep
 
 *.a
+*.log

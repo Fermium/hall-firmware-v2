@@ -51,7 +51,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC =	src/main.c src/lib/adc/ads1115.c src/lib/i2c/i2c.c src/lib/dac/max5805.c \
+SRC =	src/lib/i2c/i2c.c src/lib/dac/max5805.c src/lib/timer/timer1.c src/lib/pins/pins.c \
 
 
 # MCU name, you MUST set this to match the board you are using
@@ -82,7 +82,7 @@ OBJDIR = .
 
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC =
+CPPSRC = src/main.cpp src/lib/adc/ads1115.cpp src/lib/scheduler/scheduler.cpp src/lib/heater/heater.cpp src/lib/commands/commands.cpp src/lib/led/led.cpp
 
 
 # List Assembler source files here.
@@ -391,7 +391,7 @@ ALL_CFLAGS = -mmcu=$(MCU) -I. $(CFLAGS) $(GENDEPFLAGS)
 ALL_CPPFLAGS = -mmcu=$(MCU) -I. -x c++ $(CPPFLAGS) $(GENDEPFLAGS)
 ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
-
+default: all
 
 datachan_all:
 	make -C src/lib/data-chan/Device lib

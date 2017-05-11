@@ -39,6 +39,29 @@ int max5805_init(uint8_t address_t)
 		return 0;
 }
 
+
+int max5805_set_to_middlescale(uint8_t address_t)
+{
+  int returncode = 0;
+
+
+		address = address_t;
+
+		//set default value to middle scale
+		b[0] = 0x00;
+		b[1] = 0b01000000;
+		returncode = i2c_writeReg(address, 0b01100000, b, 2);
+		if (returncode != 0)
+				return 1;
+		//clear output, codeload to middlescale
+		b[0] = 0b10000000;
+		b[1] = 0b00000000;
+		returncode = i2c_writeReg(address, 0b10100000, b, 2);
+		if (returncode != 0)
+				return 1;
+		return 0;
+}
+
 //enable and disable output
 int max5805_outenable(bool enable){
   int returncode = 0;
@@ -95,6 +118,9 @@ int  max5805_setref(float ref_t)
 		return 0;
 }
 
+float max5805_getref(){
+  return ref;
+}
 /*
    {
    float getref()
@@ -160,5 +186,5 @@ int  max5805_setref(float ref_t)
  		returncode = i2c_writeReg(address, 0b10100000, b, 2);
      	if (returncode != 0)
  				return 1;
-
+    return returncode;
  }
