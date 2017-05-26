@@ -102,7 +102,6 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 			 case 0x02:
 			 	uint8_t power;
 				memcpy(&power,pointer,sizeof(uint8_t));
-				heater.set_duty_cycle(power);
 				set_heater_state(&heater,power);
 			 	break;
 
@@ -118,6 +117,12 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 					set_channel_gain(&adc2,channel%8,gain);
 				}
 			 	break;
+				case 0x04:
+ 			 	uint16_t current;
+ 				memcpy(&current,pointer,sizeof(uint16_t));
+				set_current_output_raw(current);
+ 			 	break;
+
 		 }
 
 }
