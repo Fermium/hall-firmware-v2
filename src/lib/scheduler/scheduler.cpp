@@ -5,14 +5,16 @@ static bool measure_ready=false;
 static ADS1115* adc1;
 static ADS1115* adc2;
 static HEATER* heater;
-void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat){
+static LOCKIN* lock;
+//static PIDControl pid1(1.0,1.0,1.0,samp.time,min,max,AUTOMATIC,DIRECT);
+void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat,LOCKIN* Lock){
   //unsigned long task = timer1_millis() % 8;
  adc1=Adc1;
  adc2=Adc2;
  heater=heat;
+ lock = Lock;
  static unsigned long executionCycleCounter = 0;
  executionCycleCounter ++;
-
  static unsigned long lastExecution[NUMBER_OF_TASKS] = {0};
 
   switch(executionCycleCounter % NUMBER_OF_TASKS){
@@ -74,10 +76,14 @@ void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat){
 int task0(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
   static uint8_t lastRead=0;
-  if(fromLastExecution<fmax(adc1->getsp(),adc2->getsp())&&heater->time_to_transition()<4){
+  static uint16_t i=0;
+  if(fromLastExecution<fmax(adc1->getsp(),adc2->getsp())&&heater->time_to_transition()<4&&lock->time_to_transition()<4){
     return 2;
   }
   if(lastRead==0){
+    max5805_codeloadRaw(2048+i);
+    i++;
+    _delay_ms(10);
     measure=new_nonrealtime_measure(0xFF);
   }
   _delay_ms(10);
@@ -102,20 +108,26 @@ int task1(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 
 int task2(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
-
   heater->evaluate();
-
 }
 
-
+//lock in
 int task3(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
-
+  //current_sgn = (adc1->get_diff_read(2,3) > 0) 1 : -1;
+  //lock->evaluate();
+  //current_sgn = lock->get_sgn()
 }
 
 int task4(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
-
+  /*if(fromLastExecution<samp.time) { return 2; }
+  //input in qualche modo che io non so
+  input;
+  pid1.PIDInputSet(input);
+  if(pid1.PIDCompute()){
+    output = pid1.PIDOutputGet();
+  }*/
 }
 
 int task5(unsigned long  executionCycleCounter, unsigned long fromLastExecution)

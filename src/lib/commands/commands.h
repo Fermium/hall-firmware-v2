@@ -9,8 +9,9 @@
   }
   #include "../heater/heater.h"
   #include "../adc/ads1115.h"
+  #include "../lock-in/lock-in.h"
 
-  void set_current_output(float);
+  void set_current_output(LOCKIN* ,float);
   void set_heater_state(HEATER*,uint8_t);
   void set_channel_gain(ADS1115*,uint8_t,uint8_t);
 

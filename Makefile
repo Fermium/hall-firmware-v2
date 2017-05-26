@@ -82,7 +82,7 @@ OBJDIR = .
 
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = src/main.cpp src/lib/adc/ads1115.cpp src/lib/scheduler/scheduler.cpp src/lib/heater/heater.cpp src/lib/commands/commands.cpp src/lib/led/led.cpp
+CPPSRC = src/main.cpp src/lib/adc/ads1115.cpp src/lib/scheduler/scheduler.cpp src/lib/heater/heater.cpp src/lib/commands/commands.cpp src/lib/led/led.cpp src/lib/lock-in/lock-in.cpp src/lib/pid/pid_controller.cpp
 
 
 # List Assembler source files here.

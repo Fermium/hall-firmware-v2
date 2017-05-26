@@ -12,11 +12,12 @@
   }
   #include "../adc/ads1115.h"
   #include "../heater/heater.h"
+  #include "../lock-in/lock-in.h"
+  #include "../pid/pid_controller.h"
+  #define NUMBER_OF_TASKS 5
 
-  #define NUMBER_OF_TASKS 4
 
-
-  void start_task(ADS1115*,ADS1115*,HEATER*);
+  void start_task(ADS1115*,ADS1115*,HEATER*,LOCKIN*);
 
   //tasks
   int task0(unsigned long, unsigned long);

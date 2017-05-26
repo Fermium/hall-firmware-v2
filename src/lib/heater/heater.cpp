@@ -19,7 +19,6 @@ int HEATER::evaluate(){
 
     else{
       portwrite(this->port,this->pin,true);
-      this->state=true;
     }
     return 0;
   }

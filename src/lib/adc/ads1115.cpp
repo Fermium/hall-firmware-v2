@@ -78,7 +78,6 @@ float ADS1115::get_diff_read(uint8_t startch,uint8_t endch){
 
 }
 
-
 uint16_t ADS1115::get_channel_cfg(uint8_t startch,uint8_t endch){
   uint16_t ch = 0x0000;
   if (startch > endch)

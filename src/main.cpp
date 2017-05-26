@@ -21,6 +21,7 @@ ADC | CHANNEL | MEANING
 #include <math.h>
 #include "lib/adc/ads1115.h"
 #include "lib/heater/heater.h"
+#include "lib/lock-in/lock-in.h"
 #include "lib/scheduler/scheduler.h"
 #include "lib/led/led.h"
 #include "lib/commands/commands.h"
@@ -35,6 +36,7 @@ extern "C"{
 
 ADS1115 adc1;
 ADS1115 adc2;
+LOCKIN lock;
 HEATER heater(0x0C,6,255);
 LED led(0x0B,0,255);
 void io_setup()
@@ -43,6 +45,7 @@ void io_setup()
 		max5805_init(0x36);
 		max5805_setref(2.5);
 		max5805_outenable(true);
+		lock.set_current(0.5);
 		adc1.setaddress(ADS1115_ADDR_GND);
 		adc2.setaddress(ADS1115_ADDR_VDD);
 		heater.set_duty_cycle(0);
@@ -96,7 +99,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 			 case 0x01:
 			 	float state;
 				memcpy(&state,pointer,sizeof(float));
-				set_current_output(state);
+				set_current_output(&lock,state);
 			 	break;
 
 			 case 0x02:
@@ -111,11 +114,11 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 				memcpy(&channel,pointer,sizeof(uint8_t));
 				pointer++;
 				memcpy(&gain,pointer,sizeof(uint8_t));
-				if(channel/8 == 0){
-					set_channel_gain(&adc1,channel%8,gain);
+				if(channel/4 == 0){
+					set_channel_gain(&adc1,channel,gain);
 				}
 				else{
-					set_channel_gain(&adc2,channel%8,gain);
+					set_channel_gain(&adc2,channel%4,gain);
 				}
 			 	break;
 
@@ -140,6 +143,6 @@ void Event_Init(void) {
 //this routine is execute only when the device is connected
 void MainRoutine(void) {
 	if (datachan_output_enabled()) {
-				start_task(&adc1,&adc2,&heater);
+				start_task(&adc1,&adc2,&heater,&lock);
 		}
 }
