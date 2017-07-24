@@ -5,12 +5,11 @@ LOCKIN::LOCKIN(){
 
 int LOCKIN::evaluate(){
   if((timer1_millis()/PERIOD) % FULL_SCALE>DUTY_CYCLE ){
-    this-> sgn = -1;
+    max5805_codeload(this->lower);
   }
   else{
-    this -> sgn = 1;
+    max5805_codeload(this->upper);
   }
-  max5805_codeload((this->current/2.5+0.5*max5805_getref())*this->sgn);
   return 0;
 }
 

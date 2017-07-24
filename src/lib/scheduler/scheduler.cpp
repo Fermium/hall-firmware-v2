@@ -6,6 +6,8 @@ static ADS1115* adc1;
 static ADS1115* adc2;
 static HEATER* heater;
 static LOCKIN* lock;
+float lower;
+float upper;
 //static PIDControl pid1(1.0,1.0,1.0,samp.time,min,max,AUTOMATIC,DIRECT);
 void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat,LOCKIN* Lock){
   //unsigned long task = timer1_millis() % 8;
@@ -76,14 +78,10 @@ void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat,LOCKIN* Lock){
 int task0(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
   static uint8_t lastRead=0;
-  static uint16_t i=0;
   if(fromLastExecution<fmax(adc1->getsp(),adc2->getsp())&&heater->time_to_transition()<4&&lock->time_to_transition()<4){
     return 2;
   }
   if(lastRead==0){
-    max5805_codeloadRaw(2048+i);
-    i++;
-    _delay_ms(10);
     measure=new_nonrealtime_measure(0xFF);
   }
   _delay_ms(10);
@@ -114,9 +112,7 @@ int task2(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 //lock in
 int task3(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
-  //current_sgn = (adc1->get_diff_read(2,3) > 0) 1 : -1;
-  //lock->evaluate();
-  //current_sgn = lock->get_sgn()
+  lock->evaluate();
 }
 
 int task4(unsigned long  executionCycleCounter, unsigned long fromLastExecution)

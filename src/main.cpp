@@ -33,7 +33,8 @@ extern "C"{
 	#include "lib/dac/max5805.h"
 	#include "lib/timer/timer1.h"
 }
-
+extern float lower;
+extern float upper;
 ADS1115 adc1;
 ADS1115 adc2;
 LOCKIN lock;
@@ -45,7 +46,6 @@ void io_setup()
 		max5805_init(0x36);
 		max5805_setref(2.5);
 		max5805_outenable(true);
-		lock.set_current(0.5);
 		adc1.setaddress(ADS1115_ADDR_GND);
 		adc2.setaddress(ADS1115_ADDR_VDD);
 		heater.set_duty_cycle(0);
@@ -97,9 +97,14 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 		 switch(command){
 
 			 case 0x01:
-			 	float state;
-				memcpy(&state,pointer,sizeof(float));
-				set_current_output(&lock,state);
+			 	float lw;
+				float up;
+				memcpy(&lw,pointer,sizeof(float));
+				pointer+=4;
+				memcpy(&up,pointer,sizeof(float));
+				lower = lw;
+				upper = up;
+				set_current_output(&lock,lower,upper);
 			 	break;
 
 			 case 0x02:

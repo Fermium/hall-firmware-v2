@@ -1,13 +1,14 @@
 #include "commands.h"
 
 
-void set_current_output(LOCKIN* lock,float current){
-  if(fabs(current)<0.0006){
+void set_current_output(LOCKIN* lock,float lower,float upper){
+  if(fabs(fmin(lower,upper))<0.0006){
     max5805_set_to_middlescale(0x36);
   }
   else{
-    //lock->set_current(current);
-    max5805_codeload(current/2.5+0.5*max5805_getref());
+    lock->set_lower(lower);
+    lock->set_upper(upper);
+    //max5805_codeload(current/2.5+0.5*max5805_getref());
   }
 }
 
