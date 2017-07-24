@@ -32,7 +32,6 @@ extern "C"{
 	#include "lib/dac/max5805.h"
 	#include "lib/timer/timer1.h"
 }
-
 ADS1115 adc1;
 ADS1115 adc2;
 HEATER heater(0x0C,6,255);
@@ -59,6 +58,7 @@ int main(void)
 		main_setup();
 		timer1_init();
 		io_setup();
+
 		while (1)
 		{
 				//perform usb step
@@ -97,6 +97,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 			 	float state;
 				memcpy(&state,pointer,sizeof(float));
 				set_current_output(state);
+				_delay_ms(50);
 			 	break;
 
 			 case 0x02:
@@ -128,7 +129,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 }
 
 void Event_Connected(void) {
-	io_setup();
+	//io_setup();
 }
 
 void Event_Disconnected(void) {
