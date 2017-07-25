@@ -33,8 +33,6 @@ extern "C"{
 	#include "lib/dac/max5805.h"
 	#include "lib/timer/timer1.h"
 }
-extern float lower;
-extern float upper;
 ADS1115 adc1;
 ADS1115 adc2;
 LOCKIN lock;
@@ -97,13 +95,11 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 		 switch(command){
 
 			 case 0x01:
-			 	float lw;
-				float up;
-				memcpy(&lw,pointer,sizeof(float));
+			 	float lower;
+				float upper;
+				memcpy(&lower,pointer,sizeof(float));
 				pointer+=4;
-				memcpy(&up,pointer,sizeof(float));
-				lower = lw;
-				upper = up;
+				memcpy(&upper,pointer,sizeof(float));
 				set_current_output(&lock,lower,upper);
 			 	break;
 

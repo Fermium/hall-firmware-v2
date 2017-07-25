@@ -6,8 +6,6 @@ static ADS1115* adc1;
 static ADS1115* adc2;
 static HEATER* heater;
 static LOCKIN* lock;
-float lower;
-float upper;
 //static PIDControl pid1(1.0,1.0,1.0,samp.time,min,max,AUTOMATIC,DIRECT);
 void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat,LOCKIN* Lock){
   //unsigned long task = timer1_millis() % 8;
@@ -112,7 +110,7 @@ int task2(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 //lock in
 int task3(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
-  //lock->evaluate();
+  lock->evaluate();
 }
 
 int task4(unsigned long  executionCycleCounter, unsigned long fromLastExecution)

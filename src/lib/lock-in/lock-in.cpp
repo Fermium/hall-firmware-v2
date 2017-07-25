@@ -5,10 +5,17 @@ LOCKIN::LOCKIN(){
 
 int LOCKIN::evaluate(){
   if((timer1_millis()/PERIOD) % FULL_SCALE>DUTY_CYCLE ){
-    max5805_codeload(this->lower);
+    if(!this->state){
+      max5805_codeload(this->lower);
+      this->state=1;
+    }
+
   }
   else{
-    max5805_codeload(this->upper);
+    if(this->state){
+      max5805_codeload(this->upper);
+      this->state=0;
+    }
   }
   return 0;
 }

@@ -2,7 +2,7 @@
   #define LOCKIN_H
   #define FULL_SCALE 255
   #define DUTY_CYCLE 127
-  #define PERIOD 50
+  #define PERIOD 1
   extern "C" {
     #include "../pins/pins.h"
     #include "../timer/timer1.h"
@@ -16,6 +16,7 @@
       uint16_t period_start;
       float  lower;
       float  upper;
+      char state=1;
 
     public :
       LOCKIN();
