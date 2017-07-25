@@ -112,7 +112,7 @@ int task2(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 //lock in
 int task3(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
-  lock->evaluate();
+  //lock->evaluate();
 }
 
 int task4(unsigned long  executionCycleCounter, unsigned long fromLastExecution)

@@ -127,8 +127,13 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 				}
 			 	break;
 
+
 				case 0x04:
- 				io_setup();
+				uint16_t current;
+				memcpy(&current,pointer,sizeof(uint16_t));
+				set_current_output_raw(current);
+				break;
+
 		 }
 
 }

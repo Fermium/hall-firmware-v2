@@ -20,3 +20,6 @@ void set_heater_state(HEATER* heater,uint8_t power){
 void set_channel_gain(ADS1115* adc,uint8_t channel,uint8_t gain){
   adc->setrange(channel,gain);
 }
+void set_current_output_raw(uint16_t current){
+    max5805_codeloadRaw(current);
+}
