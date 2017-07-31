@@ -36,11 +36,11 @@ void io_setup()
 		adc1.setaddress(ADS1115_ADDR_GND);
 		adc2.setaddress(ADS1115_ADDR_VDD);
 		heater.set_duty_cycle(200);
-		heater.set_period(1020);//2000ms
+		heater.set_period_ms(1020);//2000ms
 		heater.enable();
 		/*led.enable();
 		led.set_duty_cycle(200);
-		led.set_period(1020);//2000ms*/
+		led.set_period_ms(1020);//2000ms*/
 }
 int main(void)
 {
