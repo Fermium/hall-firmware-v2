@@ -155,18 +155,18 @@ float max5805_getref(){
  {
    int returncode = 0;
 
- 	unsigned int d; ///output code
+ 	 unsigned int d; ///output code
 
      //d=(Vout*2^n)/vref
-     d = (input * (4096.0/ref));
+  d = (input * (4096.0/ref));
 
      //max code to 2^12-1 to avoid overflow (and a 0v output!)
-     d = d < 4096 ? d : 4095;
+  d = d < 4096 ? d : 4095;
 
-     d = d << 4;
+  d = d << 4;
 
  	//split into two bytes
-     b[0] = d >> 8;
+  b[0] = d >> 8;
  	b[1] = d & 0xFF;
 
  	returncode = i2c_writeReg(address, 0b10100000, b, 2);
@@ -178,10 +178,10 @@ float max5805_getref(){
  int max5805_codeloadRaw(uint16_t input)
  {
    int returncode = 0;
-
+   uint16_t _input = input << 4;
  		//split into two bytes
-         b[0] = input >> 8;
- 		b[1] = input & 0xFF;
+         b[0] = _input >> 8;
+ 		b[1] = _input & 0xFF;
 
  		returncode = i2c_writeReg(address, 0b10100000, b, 2);
      	if (returncode != 0)

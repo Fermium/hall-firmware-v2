@@ -60,6 +60,7 @@ int main(void)
 		main_setup();
 		timer1_init();
 		io_setup();
+
 		while (1)
 		{
 				//perform usb step
@@ -106,7 +107,6 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 			 case 0x02:
 			 	uint8_t power;
 				memcpy(&power,pointer,sizeof(uint8_t));
-				heater.set_duty_cycle(power);
 				set_heater_state(&heater,power);
 			 	break;
 
@@ -123,8 +123,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 				}
 			 	break;
 
-
-				case 0x04:
+       case 0x04:
 				uint16_t current;
 				memcpy(&current,pointer,sizeof(uint16_t));
 				set_current_output_raw(current);
@@ -135,7 +134,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 }
 
 void Event_Connected(void) {
-	io_setup();
+	//io_setup();
 }
 
 void Event_Disconnected(void) {
