@@ -1,6 +1,13 @@
+/*!
+   \file "commands.h"
+   \brief "functions to execute the received data-chan commands"
+   \author "Simone Tosato"
+   \copyright "Fermium LABS srl"
+*/
+
 #ifndef COMMANDS_H
 
-  #define COMMANDS_H
+#define COMMANDS_H
   #include <stdint.h>
   #include <stdbool.h>
   #include <math.h>
