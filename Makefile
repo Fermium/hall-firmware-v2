@@ -45,6 +45,13 @@
 # To rebuild project do "make clean" then "make all".
 #----------------------------------------------------------------------------
 
+# DATA-CHAN HARDWARE CONFIGURATION
+USB_VID = 0x16D0
+USB_PID = 0x0C9B
+USB_MANUFACTURER = Fermium Labs srl
+USB_NAME = Hall Effect Apparatus
+
+#----------------------------------------------------------------------------
 
 # Target file name (without extension).
 TARGET = main
@@ -163,6 +170,7 @@ CFLAGS += -Wstrict-prototypes
 CFLAGS += -Wa,-adhlns=$(<:%.c=$(OBJDIR)/%.lst)
 CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 CFLAGS += $(CSTANDARD)
+CFLAGS += $(HWCONFIG)
 
 
 #---------------- Compiler Options C++ ----------------
@@ -189,6 +197,7 @@ CPPFLAGS += -Wundef
 #CPPFLAGS += -Wsign-compare
 CPPFLAGS += -Wa,-adhlns=$(<:%.cpp=$(OBJDIR)/%.lst)
 CPPFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
+CPPFLAGS += $(HWCONFIG)
 #CPPFLAGS += $(CSTANDARD)
 
 
@@ -401,6 +410,11 @@ docs_pdf: docs
 
 docs_clean:
 	@rm -rf docs
+
+
+# Data-chan HW configuration defines
+DATACHAN_HWCONFIG = -DUSB_VID=$(USB_VID) -DUSB_PID=$(USB_PID) -DUSB_MANUFACTURER="L\"$(USB_MANUFACTURER)\"" -DUSB_NAME="L\"$(USB_NAME)\""
+export DATACHAN_HWCONFIG
 
 
 datachan_all:

@@ -19,11 +19,6 @@
 #include "lib/led/led.h"
 #include "lib/commands/commands.h"
 
-#define USB_VID 0x16D0
-#define USB_PID 0x0C9B
-#define USB_MANUFACTURER L"FermiumLABS"
-#define USB_NAME L"Hall Effect"
-
 extern "C"{
 	#include "lib/pins/pins.h"
 	#include "lib/data-chan/Device/Bootstrap/main.h"
