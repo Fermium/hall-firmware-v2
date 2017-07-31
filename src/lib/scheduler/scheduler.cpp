@@ -35,42 +35,42 @@ void task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat){
 
   switch(executionCycleCounter % NUMBER_OF_TASKS){
     case 0:
-    if (!task0(executionCycleCounter, lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
+    if (!task0(lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
     {
     lastExecution[executionCycleCounter % NUMBER_OF_TASKS] = timer1_millis();
     }
     break;
 
     case 1:
-    if (!task1(executionCycleCounter, lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
+    if (!task1(lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
     {
     lastExecution[executionCycleCounter % NUMBER_OF_TASKS] = timer1_millis();
     }
     break;
 
     case 2:
-    if (!task2(executionCycleCounter, lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
+    if (!task2(lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
     {
     lastExecution[executionCycleCounter % NUMBER_OF_TASKS] = timer1_millis();
     }
     break;
 
     case 3:
-    if (!task3(executionCycleCounter, lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
+    if (!task3(lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
     {
     lastExecution[executionCycleCounter % NUMBER_OF_TASKS] = timer1_millis();
     }
     break;
 
     case 4:
-    if (!task4(executionCycleCounter, lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
+    if (!task4(lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
     {
     lastExecution[executionCycleCounter % NUMBER_OF_TASKS] = timer1_millis();
     }
     break;
 
     case 5:
-    if (!task5(executionCycleCounter, lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
+    if (!task5(lastExecution[executionCycleCounter % NUMBER_OF_TASKS]-timer1_millis()))
     {
     lastExecution[executionCycleCounter % NUMBER_OF_TASKS] = timer1_millis();
     }

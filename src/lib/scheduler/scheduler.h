@@ -23,10 +23,10 @@
   #define NUMBER_OF_TASKS 4
   void task(ADS1115*,ADS1115*,HEATER*);
 
-  int task0(unsigned long, unsigned long);
-  int task1(unsigned long, unsigned long);
-  int task2(unsigned long, unsigned long);
-  int task3(unsigned long, unsigned long);
-  int task4(unsigned long, unsigned long);
-  int task5(unsigned long, unsigned long);
+  int task0(unsigned long);
+  int task1(unsigned long);
+  int task2(unsigned long);
+  int task3(unsigned long);
+  int task4(unsigned long);
+  int task5(unsigned long);
 #endif
