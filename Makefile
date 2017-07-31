@@ -48,7 +48,7 @@
 # DATA-CHAN HARDWARE CONFIGURATION
 USB_VID = 0x16D0
 USB_PID = 0x0C9B
-USB_MANUFACTURER = Fermium Labs srl
+USB_MANUFACTURER = Fermium LABS srl
 USB_NAME = Hall Effect Apparatus
 
 #----------------------------------------------------------------------------

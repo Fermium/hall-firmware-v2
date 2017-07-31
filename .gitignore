@@ -24,3 +24,4 @@ main\.sym
 docs/
 build-tmp/
 bin/*/
+*.c.*
