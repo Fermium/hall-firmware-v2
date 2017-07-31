@@ -1,0 +1,9 @@
+box: ubuntu:xenial
+
+build:
+  steps:
+    - install-packages:
+        packages: gcc-avr avr-libc avrdude make git clang
+    - script:
+        name: Build
+        code: make
