@@ -29,7 +29,7 @@ ADS1115::ADS1115(){
    \return always returns zero, failure state not implemented
 */
 int ADS1115::config(uint8_t startch,uint8_t endch){
-  uint16_t config = 0x0000;
+  uint16_t config = 0x0000; /*!< Configuration register */
   config = ADS1115_REG_CONFIG_CQUE_NONE | /*!< Disable the comparator (default val) */
        ADS1115_REG_CONFIG_CLAT_NONLAT | /*!< Non-latching (default val) */
        ADS1115_REG_CONFIG_CPOL_ACTVLOW | /*!< Alert/Rdy active low   (default val) */
