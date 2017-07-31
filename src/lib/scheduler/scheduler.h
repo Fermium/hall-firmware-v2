@@ -21,7 +21,7 @@
   #include "../heater/heater.h"
 
   #define NUMBER_OF_TASKS 4
-  void start_task(ADS1115*,ADS1115*,HEATER*);
+  void task(ADS1115*,ADS1115*,HEATER*);
 
   int task0(unsigned long, unsigned long);
   int task1(unsigned long, unsigned long);

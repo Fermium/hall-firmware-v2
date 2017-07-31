@@ -15,7 +15,13 @@ static ADS1115* adc2;
 static HEATER* heater;
 
 
-void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat){
+/*!
+   \brief main execution task, containing other sub-task
+   \param Adc1 Istance of ADC1, from main.cpp
+   \param Adc2 Istance of ADC2, from main.cpp
+   \param heat Istance of Heater, from main.cpp
+*/
+void task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat){
   //unsigned long task = timer1_millis() % 8;
 
  adc1=Adc1; /*!< ADS1115 ADC 1 */
