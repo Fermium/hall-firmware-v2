@@ -5,7 +5,7 @@
    \author "Simone Tosato"
    \copyright "Fermium LABS srl"
 */
-#define F_CPU 16000000UL
+#define F_CPU 16000000UL /*!< CPU clock frequency */
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdbool.h>
