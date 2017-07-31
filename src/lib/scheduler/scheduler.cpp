@@ -1,3 +1,10 @@
+/*!
+   \file scheduler.cpp
+   \brief Simple task scheduler and execution
+   \author Simone Tosato
+   \author Davide Bortolami
+   \copyright (c) 2017 - Fermium LABS srl
+*/
 #include "scheduler.h"
 
 static measure_t* measure; /*!< data-chan measure istance */
