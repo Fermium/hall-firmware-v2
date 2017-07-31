@@ -1,10 +1,26 @@
+/*!
+   \file i2c.c
+   \brief I2C Serial comunication library
+   \author Varius Unknown authors
+	 \author Davide Bortolami
+	 \copyright Unknown authors
+	 \copyright Fermium LABS srl
+*/
 #include "i2c.h"
 
+/*!
+   \brief Initialize the I2C library
+*/
 void i2c_init(void)
 {
 	TWBR = (uint8_t)TWBR_val;
 }
 
+/*!
+   \brief Start a I2C comunication
+   \param address The i2c address
+   \return 0 ok, 1 comunication error
+*/
 uint8_t i2c_start(uint8_t address)
 {
 	// reset TWI control register
@@ -45,6 +61,10 @@ uint8_t i2c_write(uint8_t data)
 	return 0;
 }
 
+/*!
+   \brief Read with acknowledging
+   \return the read byte
+*/
 uint8_t i2c_read_ack(void)
 {
 
@@ -56,6 +76,10 @@ uint8_t i2c_read_ack(void)
 	return TWDR;
 }
 
+/*!
+   \brief Read without acknowledging
+   \return the read byte
+*/
 uint8_t i2c_read_nack(void)
 {
 
@@ -67,6 +91,13 @@ uint8_t i2c_read_nack(void)
 	return TWDR;
 }
 
+/*!
+   \brief Write to devide
+	 \param address address of the I2C device address to write to
+	 \param data a buffer of uint8_t to send
+	 \param lenght lenght of the buffer
+   \return 0 if ok, 1 if comunication error
+*/
 uint8_t i2c_transmit(uint8_t address, uint8_t* data, uint16_t length)
 {
 	if (i2c_start(address | I2C_WRITE)) return 1;
@@ -81,6 +112,13 @@ uint8_t i2c_transmit(uint8_t address, uint8_t* data, uint16_t length)
 	return 0;
 }
 
+/*!
+   \brief read from device
+	 \param address adddress of the I2C device address to read from
+	 \param data a buffer of uint8_t to fill
+	 \param lenght max lenght of the buffer, to avoid out of abound crashes
+   \return 0 if ok, 1 if comunication error
+*/
 uint8_t i2c_receive(uint8_t address, uint8_t* data, uint16_t length)
 {
 	if (i2c_start(address | I2C_READ)) return 1;
@@ -96,6 +134,14 @@ uint8_t i2c_receive(uint8_t address, uint8_t* data, uint16_t length)
 	return 0;
 }
 
+/*!
+   \brief Abstracted write to register
+	 \param devaddr address of the I2C device address to write to
+	 \param regaddr address of the register to write to
+	 \param data a buffer of uint8_t to send
+	 \param lenght lenght of the buffer
+   \return 0 if ok, 1 if comunication error
+*/
 uint8_t i2c_writeReg(uint8_t devaddr, uint8_t regaddr, uint8_t* data, uint16_t length)
 {
 	if (i2c_start(devaddr | 0x00)) return 1;
@@ -112,6 +158,15 @@ uint8_t i2c_writeReg(uint8_t devaddr, uint8_t regaddr, uint8_t* data, uint16_t l
 	return 0;
 }
 
+
+/*!
+   \brief Abstracted read from register
+	 \param devaddr address of the I2C device address to read from
+	 \param regaddr address of the register to read from
+	 \param data a buffer of uint8_t to fill
+	 \param lenght max lenght of the buffer, to avoid out of abound crashes
+   \return 0 if ok, 1 if comunication error
+*/
 uint8_t i2c_readReg(uint8_t devaddr, uint8_t regaddr, uint8_t* data, uint16_t length)
 {
 	if (i2c_start(devaddr)) return 1;
@@ -131,6 +186,11 @@ uint8_t i2c_readReg(uint8_t devaddr, uint8_t regaddr, uint8_t* data, uint16_t le
 	return 0;
 }
 
+/*!
+   \brief Stop a I2C comunication
+   \param address The i2c address
+   \return 0 ok, 1 comunication error
+*/
 void i2c_stop(void)
 {
 	// transmit STOP condition
