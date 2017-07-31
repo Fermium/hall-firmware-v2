@@ -2,6 +2,7 @@
    \file "heater.cpp"
    \brief Asyncronous ultra-low-speed PWM for powerline loads
    \author Simone Tosato
+   \author Davide Bortolami
    \copyright Fermium LABS srl
 */
 #include "heater.h"
