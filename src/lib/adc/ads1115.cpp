@@ -1,22 +1,41 @@
+/*!
+   \file "ads1115.cpp"
+   \brief "ADS115 ADC Library"
+   \author "Davide Bortolami"
+   \author "Simone Tosato"
+   \copyright "Fermium LABS srl"
+*/
+
 #include "ads1115.h"
 
+/*!
+   \brief Initialize the I2C bus and internal variables
+*/
 ADS1115::ADS1115(){
   i2c_init();
   for(uint8_t i=0;i!=8;i++){
-    this->range[i]=ADS1115_RANGE_4_096V;
+    this->range[i]=ADS1115_RANGE_4_096V; /*!< Default PGA range */
   }
   this->startch=this->endch=0;
-  this->sps=ADS1115_REG_CONFIG_DR_860SPS;
+  this->config_reg_sps=ADS1115_REG_CONFIG_DR_860SPS; /*!< Acquisition sample rate */
 }
 
+/*!
+   \brief Sets a channel
+   \details If statch and endch are the same it will do a single-ended measure, if they differ a differential measure.
+   \details The configuration needs to be updated on each and every read channel modifications
+   \param startch Positive channel of the measure
+   \param endch Negative channel of the measure
+   \return always returns zero, failure state not implemented
+*/
 int ADS1115::config(uint8_t startch,uint8_t endch){
   uint16_t config = 0x0000;
-  config = ADS1115_REG_CONFIG_CQUE_NONE | // Disable the comparator (default val)
-       ADS1115_REG_CONFIG_CLAT_NONLAT | // Non-latching (default val)
-       ADS1115_REG_CONFIG_CPOL_ACTVLOW | // Alert/Rdy active low   (default val)
-       ADS1115_REG_CONFIG_CMODE_TRAD | // Traditional comparator (default val)
-       ADS1115_REG_CONFIG_DR_860SPS | // 128 samples per second
-       ADS1115_REG_CONFIG_MODE_CONTIN; // continuous sampling
+  config = ADS1115_REG_CONFIG_CQUE_NONE | /*!< Disable the comparator (default val) */
+       ADS1115_REG_CONFIG_CLAT_NONLAT | /*!< Non-latching (default val) */
+       ADS1115_REG_CONFIG_CPOL_ACTVLOW | /*!< Alert/Rdy active low   (default val) */
+       ADS1115_REG_CONFIG_CMODE_TRAD | /*!< Traditional comparator (default val) */
+       ADS1115_REG_CONFIG_DR_860SPS | /*!< 860 samples per second */
+       ADS1115_REG_CONFIG_MODE_CONTIN; /*!< continuous sampling */
 
   uint16_t channel_cfg = this->get_channel_cfg(startch,endch);
   config |= channel_cfg;
@@ -43,7 +62,7 @@ int ADS1115::config(uint8_t startch,uint8_t endch){
   }
 
 
-  uint8_t b[2];
+  uint8_t b[2]; /*!< 16 bit buffer to be sent for I2C comunication */
   b[0] = (uint8_t) (config >> 8);
   b[1] = (uint8_t) (config & 0xFF);
 
@@ -51,10 +70,22 @@ int ADS1115::config(uint8_t startch,uint8_t endch){
   return 0;
 }
 
+
+/*!
+   \brief "Single ended measurement"
+   \param startch "channel of the measure"
+   \return "the measured voltage"
+*/
 float ADS1115::get_se_read(uint8_t startch){
   return this->get_diff_read(startch,startch);
 }
 
+/*!
+   \brief get differential measurement between two channels
+   \param startch First positive channel
+   \param endch Second negative channel
+   \return voltage The measured differential Voltage, already corrected for PGA gain
+*/
 float ADS1115::get_diff_read(uint8_t startch,uint8_t endch){
   this->config(startch,endch);
   int8_t sgn = (startch>endch) ? -1 : 1;
@@ -78,7 +109,12 @@ float ADS1115::get_diff_read(uint8_t startch,uint8_t endch){
 
 }
 
-
+/*!
+   \brief Get channel config register from start channel and end channel
+   \param startch First positive channel
+   \param endch Second negative channel
+   \return "Configuration register to be bitwise OR on to the rest of the configuration"
+*/
 uint16_t ADS1115::get_channel_cfg(uint8_t startch,uint8_t endch){
   uint16_t ch = 0x0000;
   if (startch > endch)
@@ -147,8 +183,13 @@ uint16_t ADS1115::get_channel_cfg(uint8_t startch,uint8_t endch){
   return ch;
 }
 
-
-uint8_t* ADS1115::get_channels(uint16_t channel){
+/*!
+   \brief Get diff channels from 0-7ch notation
+	 \details Transforms a 0-7 notation inspired from the configuration register of the ADDS115 that includes all single-ended and differential measuremen mode into the two single channels that it represents
+   \param channel 0 to 7 indicating the
+   \return "pointer to two-byte array indicating first and second channel"
+*/
+uint8_t* ADS1115::get_channels(uint8_t channel){
   uint8_t ch[2]={0};
   switch (channel) {
     case 0:

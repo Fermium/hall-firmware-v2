@@ -31,3 +31,5 @@ main\.sym
 
 *.a
 *.log
+
+docs/

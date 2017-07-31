@@ -74,7 +74,7 @@ void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat){
 int task0(unsigned long  executionCycleCounter, unsigned long fromLastExecution)
 {
   static uint8_t lastRead=0;
-  if(fromLastExecution<fmax(adc1->getsp(),adc2->getsp())&&heater->time_to_transition()<4){
+  if(fromLastExecution<fmax(adc1->getsperiod_ms(),adc2->getsperiod_ms())&&heater->time_to_transition()<4){
     return 2;
   }
   if(lastRead==0){

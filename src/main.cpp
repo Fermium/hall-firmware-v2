@@ -1,19 +1,10 @@
-/**
-CHANNELS
-
-ADC | CHANNEL | MEANING
- 1  |   3-0   | VR
- 1  |   3-1   | TEMP
- 1  |   3-2   | I-MES
- 1  |    3    | 2.5 V
- 2  |   3-0   | GAUSS
- 2  |   3-1   | VH1
- 2  |   3-2   | VH2
- 2  |    3    | 2.5 V
-**/
-
-
-
+/*!
+   \file "main.cpp"
+   \brief "Main entry point of the firmware"
+   \author "Davide Bortolami"
+   \author "Simone Tosato"
+   \copyright "Fermium LABS srl"
+*/
 #define F_CPU 16000000UL
 #include <avr/io.h>
 #include <util/delay.h>

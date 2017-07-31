@@ -393,11 +393,17 @@ ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
 default: all
 
+docs:
+	doxygen Doxyfile
+
+docs_pdf: docs
+	make -C docs/latex
+
 datachan_all:
 	make -C src/lib/data-chan/Device lib
 
 datachan_clean:
-		make -C src/lib/data-chan/Device clean
+	make -C src/lib/data-chan/Device clean
 
 # Default target.
 all: begin datachan_all gccversion sizebefore build sizeafter end
@@ -590,6 +596,7 @@ $(OBJDIR)/%.o : %.S
 
 # Target: clean project.
 clean: begin clean_list datachan_clean end
+	@rm -rf docs
 
 clean_list :
 	@echo
