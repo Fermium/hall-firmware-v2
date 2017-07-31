@@ -3,7 +3,7 @@
    \brief C library to use the MAX5805 DAC
    \note This library support ONLY ONE MAX5805 ic. For more, it should be converted to c++
    \author Davide Bortolami
-   \copyright Fermium LABS srl
+   \copyright (c) 2017 - Fermium LABS srl
 */
 #include "max5805.h"
 

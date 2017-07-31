@@ -1,3 +1,10 @@
+/*!
+   \file scheduler.h
+   \brief Simple task scheduler and execution
+   \author Simone Tosato
+   \author Davide Bortolami
+   \copyright (c) 2017 - Fermium LABS srl
+*/
 #ifndef SCHEDULER_H
   #define SCHEDULER_H
 
@@ -16,7 +23,6 @@
   #define NUMBER_OF_TASKS 4
   void start_task(ADS1115*,ADS1115*,HEATER*);
 
-  //tasks
   int task0(unsigned long, unsigned long);
   int task1(unsigned long, unsigned long);
   int task2(unsigned long, unsigned long);

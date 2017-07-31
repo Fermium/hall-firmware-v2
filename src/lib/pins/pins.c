@@ -2,7 +2,7 @@
    \file pins.c
    \brief simple abstraction library for basic I/O on AVR
    \author Davide Bortolami
-   \copyright Fermium LABS srl
+   \copyright (c) 2017 - Fermium LABS srl
 */
 #include <stdbool.h>
 #include <avr/io.h>

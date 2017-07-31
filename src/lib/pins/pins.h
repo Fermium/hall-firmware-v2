@@ -2,7 +2,7 @@
    \file pins.h
    \brief simple abstraction library for basic I/O on AVR
    \author Davide Bortolami
-   \copyright Fermium LABS srl
+   \copyright (c) 2017 - Fermium LABS srl
 */
 #ifndef PINS_H
 #define PINS_H

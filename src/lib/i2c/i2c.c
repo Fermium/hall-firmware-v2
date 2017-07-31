@@ -4,7 +4,7 @@
    \author Varius Unknown authors
 	 \author Davide Bortolami
 	 \copyright Unknown authors
-	 \copyright Fermium LABS srl
+	 \copyright (c) 2017 - Fermium LABS srl
 */
 #include "i2c.h"
 
