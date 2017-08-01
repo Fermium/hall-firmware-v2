@@ -1,35 +1,32 @@
 /*!
-   \file "led.cpp"
-   \brief Asyncronous ultra-low-speed PWM for powerline loads
+   \file led.cpp
+   \brief Asyncronous led blinking
    \author Simone Tosato
    \author Davide Bortolami
-   \copyright Fermium LABS srl
+   \copyright (c) 2017 - Fermium LABS srl
 */
 #include "led.h"
 
 /*!
-   \brief Initialize the class, shuts down the heater
-   \details Initialize the class, set the pin to a low impedance and low value to shut down the heater
+   \brief Initialize the class, shuts down the led
+   \details Initialize the class, set the pin to a low impedance and low value to shut down the led
    \param port port register on the MCU, in exadecimal. Example PORTA = 0x0A
    \param pin pin of the port register from 0x00 to 0x07
    \param full_scale Max value of the duty cycle, to be considere an always-on state. Usually 100 or 255
 */
-LED::LED(uint8_t port,uint8_t pin,uint16_t full_scale){
+LED::LED(uint8_t port,uint8_t pin){
   this->duty_cycle =  0;
   this->pin = pin;
   this->port = port;
   this->state = false;
-  this->full_scale=full_scale;
+  this->duty_cycle = LED_DUTY_CYCLE;
   portwrite(this->port,this->pin,false);
   ddrwrite(this->port,this->pin,DDR_OUTPUT);
 }
 
-
-
-
 /*!
-   \brief Evaluate if it's time to transition, then do it
-   \return 0 if the heater state was enabled, regardless if transition happened or not. 1 if the heater was disabled
+   \brief Evaluate if it's time to blink, then do it
+   \return 0 if the led state was enabled, regardless if transition happened or not. 1 if the led was disabled
 */
 int LED::evaluate(){
   if(this->state){
@@ -48,15 +45,15 @@ int LED::evaluate(){
 }
 
 /*!
-   \brief Enable the heater. evaluate() will start working for now on
-   \note This function does not necessarily power on the heater
+   \brief Enable the led. evaluate() will start working for now on
+   \note This function does not necessarily power on the led
 */
 void LED::enable(){
   this->state = true;
 }
 
 /*!
-   \brief Disable and power off the heater
+   \brief Disable and power off the led
 */
 void LED::disable(){
   this->state = false;

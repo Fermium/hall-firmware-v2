@@ -31,8 +31,8 @@ extern "C" {
 ADS1115 adc1;
 ADS1115 adc2;
 CGEN cgen;
-HEATER heater(0x0C,6,255);
-LED led(0x0B,0,255);
+HEATER heater(0x0C,6);
+LED led(0x0B,0);
 
 /*!
    \brief Initialize I/O
