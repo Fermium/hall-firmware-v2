@@ -11,9 +11,9 @@
   #include "../adc/ads1115.h"
   #include "../lock-in/lock-in.h"
 
-  void set_current_output(LOCKIN* ,float,float);
+  void set_current_lockin(LOCKIN* ,float,float);
   void set_heater_state(HEATER*,uint8_t);
   void set_channel_gain(ADS1115*,uint8_t,uint8_t);
-  void set_current_output_raw(uint16_t);
+  void set_current_raw(uint16_t);
 
 #endif //COMMANDS_H

@@ -100,7 +100,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 				memcpy(&lower,pointer,sizeof(float));
 				pointer+=4;
 				memcpy(&upper,pointer,sizeof(float));
-				set_current_output(&lock,lower,upper);
+				set_current_lockin(&lock,lower,upper);
 			 	break;
 
 			 case 0x02:
@@ -127,7 +127,12 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 				case 0x04:
 				uint16_t current;
 				memcpy(&current,pointer,sizeof(uint16_t));
-				set_current_output_raw(current);
+				set_current_raw(current);
+				break;
+
+
+				case 0x05:
+				io_setup();
 				break;
 
 		 }
