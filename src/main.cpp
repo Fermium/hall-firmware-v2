@@ -113,9 +113,9 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 								break;
 
 				case 0x03:   //set raw current
-								uint16_t current;
-								memcpy(&current,pointer,sizeof(uint16_t));
-								set_current_raw(current);
+								uint16_t current_raw;
+								memcpy(&current_raw,pointer,sizeof(uint16_t));
+								set_current_raw(current_raw);
 								break;
 
 				case 0x04: //set_heater_state
