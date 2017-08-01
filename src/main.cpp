@@ -97,7 +97,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 
 		 switch(command){
 
-			 case 0x01:
+			 case 0x01:  //set lockin current
 			 	float lower;
 				float upper;
 				memcpy(&lower,pointer,sizeof(float));
@@ -112,7 +112,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 					set_heater_state(&heater,power);
 			 		break;
 
-			 case 0x03:
+			 case 0x03:  //set channel gain
 				uint8_t channel,gain;
 				memcpy(&channel,pointer,sizeof(uint8_t));
 				pointer++;
@@ -125,7 +125,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 				}
 			 	break;
 
-            case 0x04:
+       case 0x04:  //set raw current
 				uint16_t current;
 				memcpy(&current,pointer,sizeof(uint16_t));
 				set_current_raw(current);

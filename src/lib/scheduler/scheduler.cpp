@@ -128,9 +128,8 @@ int task2(unsigned long fromLastExecution)
 }
 
 /*!
-   \brief task3
+   \brief evaluates the current lock-in
    \param fromLastExecution milliseconds past the last time the task was executed
-   \return 0 if executed, 2 if not execute, 1 if errored
 */
 int task3(unsigned long fromLastExecution)
 {
