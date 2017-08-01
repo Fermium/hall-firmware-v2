@@ -18,7 +18,6 @@
 #include "lib/cgen/cgen.h"
 #include "lib/scheduler/scheduler.h"
 #include "lib/led/led.h"
-#include "lib/commands/commands.h"
 
 extern "C" {
 	#include "lib/pins/pins.h"
@@ -108,25 +107,29 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 								memcpy(&lower,pointer,sizeof(float));
 								pointer+=4;
 								memcpy(&upper,pointer,sizeof(float));
-								set_current_lockin(&cgen,lower,upper);
+								cgen.set_lockin_lower(lower);
+						    cgen.set_lockin_upper(upper);
+						    cgen.enable(true);
 								break;
 
 				case 0x02:  //set costant current
 								float current;
 								memcpy(&current,pointer,sizeof(float));
-								set_current_fixed(&cgen,current);
+								cgen.set_current(current);
+						    cgen.enable(true);
+						    cgen.evaluate();
 								break;
 
 				case 0x03:   //set raw current
 								uint16_t current_raw;
 								memcpy(&current_raw,pointer,sizeof(uint16_t));
-								set_current_raw(current_raw);
+								max5805_codeloadRaw(current_raw);
 								break;
 
 				case 0x04: //set_heater_state
 								uint8_t power;
 								memcpy(&power,pointer,sizeof(uint8_t));
-								set_heater_state(&heater,power);
+								heater.set_duty_cycle(power);
 								break;
 
 				case 0x05: //set channel gain
@@ -135,14 +138,14 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 								pointer++;
 								memcpy(&gain,pointer,sizeof(uint8_t));
 								if(channel/4 == 0) {
-												set_channel_gain(&adc1,channel,gain);
+												adc1.setrange(channel,gain);
 								}
 								else{
-												set_channel_gain(&adc2,channel%4,gain);
+												adc2.setrange(channel%4,gain);
 								}
 								break;
 
-				case 0x06:
+				case 0x06:  //reset
 								io_setup();
 								break;
 
