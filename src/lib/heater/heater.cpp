@@ -1,9 +1,9 @@
 /*!
-   \file "heater.cpp"
+   \file heater.cpp
    \brief Asyncronous ultra-low-speed PWM for powerline loads
    \author Simone Tosato
    \author Davide Bortolami
-   \copyright Fermium LABS srl
+   \copyright (c) 2017 - Fermium LABS srl
 */
 #include "heater.h"
 
@@ -14,12 +14,11 @@
    \param pin pin of the port register from 0x00 to 0x07
    \param full_scale Max value of the duty cycle, to be considere an always-on state. Usually 100 or 255
 */
-HEATER::HEATER(uint8_t port,uint8_t pin,uint16_t full_scale){
+HEATER::HEATER(uint8_t port,uint8_t pin){
   this->duty_cycle =  0;
   this->pin = pin;
   this->port = port;
   this->state = false;
-  this->full_scale=full_scale;
   portwrite(this->port,this->pin,false);
   ddrwrite(this->port,this->pin,DDR_OUTPUT);
 }
