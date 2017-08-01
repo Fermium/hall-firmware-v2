@@ -31,7 +31,7 @@ LED::LED(uint8_t port,uint8_t pin,uint16_t full_scale){
    \brief Evaluate if it's time to transition, then do it
    \return 0 if the heater state was enabled, regardless if transition happened or not. 1 if the heater was disabled
 */
-int LED::blink(){
+int LED::evaluate(){
   if(this->state){
     if((timer1_millis()/(this->period/this->full_scale)) % full_scale>this->duty_cycle ){
       portwrite(this->port,this->pin,false);

@@ -77,7 +77,6 @@ int main(void)
 
 				while (1)
 				{
-								led.blink();
 								main_loop(); //data-chan event processing
 				}
 				return 0;
@@ -181,6 +180,6 @@ void Event_Init(void) {
  */
 void MainRoutine(void) {
 				if (datachan_output_enabled()) {
-								start_task(&adc1,&adc2,&heater,&cgen);
+								start_task(&adc1,&adc2,&heater,&cgen,&led);
 				}
 }

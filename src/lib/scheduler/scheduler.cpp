@@ -14,9 +14,10 @@ static ADS1115* adc1;
 static ADS1115* adc2;
 static HEATER* heater;
 static CGEN* cgen;
+static LED* led;
 static unsigned long executionCycleCounter = 0; /*!< Counter incremented each execution cycle */
 //static PIDControl pid1(1.0,1.0,1.0,samp.time,min,max,AUTOMATIC,DIRECT);
-void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat,CGEN* Cgen){
+void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* Heater,CGEN* Cgen,LED* Led){
 /*!
    \brief main execution task, containing other sub-task
    \param Adc1 Istance of ADC1, from main.cpp
@@ -27,8 +28,9 @@ void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat,CGEN* Cgen){
 
  adc1=Adc1; /*!< ADS1115 ADC 1 */
  adc2=Adc2; /*!< ADS1115 ADC 2 */
- heater=heat;
+ heater=Heater;
  cgen = Cgen;
+ led = Led;
  executionCycleCounter ++;
  static unsigned long lastExecution[NUMBER_OF_TASKS] = {0};
 
@@ -125,6 +127,8 @@ int task1(unsigned long fromLastExecution)
 int task2(unsigned long fromLastExecution)
 {
   heater->evaluate();
+  led->evaluate();
+  cgen->evaluate();
 }
 
 /*!
@@ -133,7 +137,6 @@ int task2(unsigned long fromLastExecution)
 */
 int task3(unsigned long fromLastExecution)
 {
-  cgen->evaluate();
 }
 
 /*!

@@ -85,7 +85,7 @@
     */
       bool get_state(){ return this->state; }
 
-      int blink();
+      int evaluate();
       void enable();
       void disable();
   };
