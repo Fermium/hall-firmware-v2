@@ -8,11 +8,14 @@
 
 #ifndef LOCKIN_H
   #define LOCKIN_H
+
   #define FULL_SCALE 255
   #define DUTY_CYCLE 127
   #define PERIOD 1
 
   #define F_IF_SIGMA 0.00001
+
+
   extern "C" {
     #include "../pins/pins.h"
     #include "../timer/timer1.h"
@@ -55,24 +58,24 @@
          \brief Get lower current bound
          \return Lower current bound, in Amperes
       */
-      float get_lockin_lower(){ return this->lower; }
+      float get_lockin_lower(){ return this->lockin_lower; }
       /*!
          \brief Set lower current bound
          \note if you make the lower and upper bound differ, you'll trigger lock-in mode
          \param lower Lower current bound, in Amperes
       */
-      void set_lockin_lower(float lower){ this->lower=lower; }
+      void set_lockin_lower(float lower){ this->lockin_lower=lower; }
       /*!
          \brief Get upper current bound
          \return Upper current bound, in Amperes
       */
-      float get_lockin_upper(){ return this->upper; }
+      float get_lockin_upper(){ return this->lockin_upper; }
       /*!
          \brief Set upper current bound
          \note if you make the lower and upper bound differ, you'll trigger lock-in mode
          \param upper Upper current bound, in Amperes
       */
-      void set_lockin_upper(float upper){ this->upper=upper; }
+      void set_lockin_upper(float upper){ this->lockin_upper=upper; }
       /*!
          \brief Enable or disable the current generator
          \details A disabled current generator will attempt no action in changing the state of the D

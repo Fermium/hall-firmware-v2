@@ -15,19 +15,14 @@
    \param current the input current, in A (Amperes)
 */
 void set_current_lockin(LOCKIN* lock,float lower,float upper){
-    lock->set_lower(lower);
-    lock->set_upper(upper);
+    lock->set_lockin_lower(lower);
+    lock->set_lockin_upper(upper);
     //max5805_codeload(current/2.5+0.5*max5805_getref());
 }
 
-void set_current_fixed(float current){
-
-  if(fabs(current)<0.0006){
-    max5805_set_to_middlescale();
-  }
-  else{
-    max5805_codeload(current/2.5+0.5*max5805_getref());
-  }
+void set_current_fixed(LOCKIN* lock,float current){
+   lock->set_current(current);
+   lock->evaluate();
 }
 /*!
    \brief Set the heater power

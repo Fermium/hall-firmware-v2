@@ -22,9 +22,14 @@ int LOCKIN::evaluate(){
 
         if(enabled) {
                 if(fabs(lockin_lower - lockin_upper) < F_IF_SIGMA) { // if the two bounds are equal: costant current scenario
-                        float last_current;
-                        last_current = (lockin_lower + lockin_upper) / 2; //get the average
-                        max5805_codeload(current_to_voltage(last_current));
+                        float current;
+                        current = (lockin_lower + lockin_upper) / 2; //get the average
+                        if(fabs(current)<0.0006){
+                          shutdown();
+                        }
+                        else{
+                        max5805_codeload(current_to_voltage(current));
+                      }
                 }
                 else {
                         if((timer1_millis()/PERIOD) % FULL_SCALE>DUTY_CYCLE ) { //lockin scenario
@@ -61,5 +66,5 @@ void LOCKIN::shutdown(){
         this->enabled = false;
         this->lockin_lower = 0.0;
         this->lockin_upper = 0.0;
-        max5805_set_to_middlescale()
+        max5805_set_to_middlescale();
 }

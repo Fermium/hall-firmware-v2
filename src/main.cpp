@@ -44,6 +44,7 @@ void io_setup()
 				//DAC
 				max5805_init(0x36);
 				max5805_setref(2.5);
+				max5805_set_to_middlescale();
 				max5805_outenable(true);
 
 				//ADC
@@ -109,7 +110,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 				case 0x02:  //set lockin current
 								float current;
 								memcpy(&current,pointer,sizeof(float));
-								set_current_fixed(current);
+								set_current_fixed(&lock,current);
 								break;
 
 				case 0x03:   //set raw current
