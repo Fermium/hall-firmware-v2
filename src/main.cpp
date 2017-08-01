@@ -54,9 +54,11 @@ void io_setup()
 				heater.set_duty_cycle(0);
 				heater.set_period_ms(1020); //2000ms
 				heater.enable();
-				/*led.enable();
-				   led.set_duty_cycle(200);
-				   led.set_period_ms(1020);//2000ms*/
+
+				//LED
+				led.set_duty_cycle(200);
+			  led.set_period_ms(1020);//2000ms
+				led.enable();
 }
 
 /*!
@@ -72,6 +74,7 @@ int main(void)
 
 				while (1)
 				{
+								led.blink();
 								main_loop(); //data-chan event processing
 				}
 				return 0;

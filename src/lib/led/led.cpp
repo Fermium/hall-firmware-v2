@@ -1,7 +1,21 @@
+/*!
+   \file "led.cpp"
+   \brief Asyncronous ultra-low-speed PWM for powerline loads
+   \author Simone Tosato
+   \author Davide Bortolami
+   \copyright Fermium LABS srl
+*/
 #include "led.h"
 
+/*!
+   \brief Initialize the class, shuts down the heater
+   \details Initialize the class, set the pin to a low impedance and low value to shut down the heater
+   \param port port register on the MCU, in exadecimal. Example PORTA = 0x0A
+   \param pin pin of the port register from 0x00 to 0x07
+   \param full_scale Max value of the duty cycle, to be considere an always-on state. Usually 100 or 255
+*/
 LED::LED(uint8_t port,uint8_t pin,uint16_t full_scale){
-  this->duty_cycle = this->period_start = this-> full_cycle_ms = this->expected_transition =  0;
+  this->duty_cycle =  0;
   this->pin = pin;
   this->port = port;
   this->state = false;
@@ -10,9 +24,16 @@ LED::LED(uint8_t port,uint8_t pin,uint16_t full_scale){
   ddrwrite(this->port,this->pin,DDR_OUTPUT);
 }
 
+
+
+
+/*!
+   \brief Evaluate if it's time to transition, then do it
+   \return 0 if the heater state was enabled, regardless if transition happened or not. 1 if the heater was disabled
+*/
 int LED::blink(){
   if(this->state){
-    if((timer1_millis()/this->full_cycle_ms) % full_scale>this->duty_cycle ){
+    if((timer1_millis()/(this->period/this->full_scale)) % full_scale>this->duty_cycle ){
       portwrite(this->port,this->pin,false);
 
     }
@@ -26,9 +47,18 @@ int LED::blink(){
   return 1;
 }
 
+/*!
+   \brief Enable the heater. evaluate() will start working for now on
+   \note This function does not necessarily power on the heater
+*/
 void LED::enable(){
   this->state = true;
 }
+
+/*!
+   \brief Disable and power off the heater
+*/
 void LED::disable(){
   this->state = false;
+  portwrite(this->port,this->pin,false);
 }
