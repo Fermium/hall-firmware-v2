@@ -1,16 +1,16 @@
 /*!
-   \file lock-in.cpp
-   \brief Lock-in current generation
+   \file cgen.cpp
+   \brief Advanced asyncronoys costant-current + lock-in contro
    \author Simone Tosato
    \author Davide Bortolami
    \copyright (c) 2017 - Fermium LABS srl
- */
-#include "lock-in.h"
+*/
+#include "cgen.h"
 
 /*!
    \brief empty initializer
 */
-LOCKIN::LOCKIN(){
+CGEN::CGEN(){
   reset();
 }
 
@@ -19,7 +19,7 @@ LOCKIN::LOCKIN(){
    \details take no action if not enabled
    \details if lower and upper bounds of the current are identical, disables the lo
  */
-int LOCKIN::evaluate(){
+int CGEN::evaluate(){
 
         if(enabled) {
                 if(fabs(lockin_lower - lockin_upper) < F_IF_SIGMA) { // if the two bounds are equal: costant current scenario
@@ -55,7 +55,7 @@ int LOCKIN::evaluate(){
    \brief compute time to transition (present or past, absolute)
    \return time to transition, in milliseconds
  */
-int LOCKIN::time_to_transition(){
+int CGEN::time_to_transition(){
         int t = (timer1_millis()/PERIOD) % FULL_SCALE;
         return fmin(fabs(t-DUTY_CYCLE),fmin(t,FULL_SCALE-t))*PERIOD;
 }
@@ -63,7 +63,7 @@ int LOCKIN::time_to_transition(){
 /*!
    \brief Immediate reset, reset and disabling of the current generator
  */
-void LOCKIN::reset(){
+void CGEN::reset(){
         this->enabled = false;
         this->lockin_lower = 0.0;
         this->lockin_upper = 0.0;

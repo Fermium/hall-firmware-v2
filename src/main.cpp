@@ -15,7 +15,7 @@
 #include <math.h>
 #include "lib/adc/ads1115.h"
 #include "lib/heater/heater.h"
-#include "lib/lock-in/lock-in.h"
+#include "lib/cgen/cgen.h"
 #include "lib/scheduler/scheduler.h"
 #include "lib/led/led.h"
 #include "lib/commands/commands.h"
@@ -30,7 +30,7 @@ extern "C" {
 
 ADS1115 adc1;
 ADS1115 adc2;
-LOCKIN lock;
+CGEN cgen;
 HEATER heater(0x0C,6,255);
 LED led(0x0B,0,255);
 
@@ -56,8 +56,8 @@ void io_setup()
 				heater.set_period_ms(1020); //2000ms
 				heater.enable();
 
-				lock.reset();
-				lock.enable(false);
+				cgen.reset();
+				cgen.enable(false);
 				//LED
 				led.set_duty_cycle(200);
 			  led.set_period_ms(1020);//2000ms
@@ -109,13 +109,13 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 								memcpy(&lower,pointer,sizeof(float));
 								pointer+=4;
 								memcpy(&upper,pointer,sizeof(float));
-								set_current_lockin(&lock,lower,upper);
+								set_current_lockin(&cgen,lower,upper);
 								break;
 
 				case 0x02:  //set costant current
 								float current;
 								memcpy(&current,pointer,sizeof(float));
-								set_current_fixed(&lock,current);
+								set_current_fixed(&cgen,current);
 								break;
 
 				case 0x03:   //set raw current
@@ -181,6 +181,6 @@ void Event_Init(void) {
  */
 void MainRoutine(void) {
 				if (datachan_output_enabled()) {
-								start_task(&adc1,&adc2,&heater,&lock);
+								start_task(&adc1,&adc2,&heater,&cgen);
 				}
 }

@@ -16,10 +16,10 @@
   }
   #include "../heater/heater.h"
   #include "../adc/ads1115.h"
-  #include "../lock-in/lock-in.h"
+  #include "../cgen/cgen.h"
 
-  void set_current_lockin(LOCKIN* ,float,float);
-  void set_current_fixed(LOCKIN*,float);
+  void set_current_lockin(CGEN* ,float,float);
+  void set_current_fixed(CGEN*,float);
   void set_heater_state(HEATER*,uint8_t);
   void set_channel_gain(ADS1115*,uint8_t,uint8_t);
   void set_current_raw(uint16_t);

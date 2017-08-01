@@ -1,13 +1,13 @@
 /*!
-   \file lock-in.h
-   \brief Lock-in current generation
+   \file cgen.h
+   \brief Advanced asyncronoys costant-current + lock-in contro
    \author Simone Tosato
    \author Davide Bortolami
    \copyright (c) 2017 - Fermium LABS srl
 */
 
-#ifndef LOCKIN_H
-  #define LOCKIN_H
+#ifndef CGEN_H
+  #define CGEN_H
 
   #define FULL_SCALE 255
   #define DUTY_CYCLE 127
@@ -25,9 +25,9 @@
 
   }
   /*!
-     \brief Lock-in class
+     \brief current generator class
   */
-  class LOCKIN {
+  class CGEN {
     private:
 
       uint16_t period_start;
@@ -47,7 +47,7 @@
       float current_to_voltage(float current){return (current/2.5+0.5*max5805_getref());}
 
     public :
-      LOCKIN();
+      CGEN();
 
       /*!
          \brief set the curent (costant current mode)
