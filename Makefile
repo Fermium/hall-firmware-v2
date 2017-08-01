@@ -45,6 +45,13 @@
 # To rebuild project do "make clean" then "make all".
 #----------------------------------------------------------------------------
 
+# DATA-CHAN HARDWARE CONFIGURATION
+USB_VID = 0x16D0
+USB_PID = 0x0C9B
+USB_MANUFACTURER = Fermium LABS srl
+USB_NAME = Hall Effect Apparatus
+
+#----------------------------------------------------------------------------
 
 # Target file name (without extension).
 TARGET = main
@@ -82,7 +89,7 @@ OBJDIR = .
 
 
 # List C++ source files here. (C dependencies are automatically generated.)
-CPPSRC = src/main.cpp src/lib/adc/ads1115.cpp src/lib/scheduler/scheduler.cpp src/lib/heater/heater.cpp src/lib/commands/commands.cpp src/lib/led/led.cpp
+CPPSRC = src/main.cpp src/lib/adc/ads1115.cpp src/lib/scheduler/scheduler.cpp src/lib/heater/heater.cpp src/lib/commands/commands.cpp src/lib/led/led.cpp src/lib/lock-in/lock-in.cpp src/lib/pid/pid_controller.cpp
 
 
 # List Assembler source files here.
@@ -163,6 +170,7 @@ CFLAGS += -Wstrict-prototypes
 CFLAGS += -Wa,-adhlns=$(<:%.c=$(OBJDIR)/%.lst)
 CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 CFLAGS += $(CSTANDARD)
+CFLAGS += $(HWCONFIG)
 
 
 #---------------- Compiler Options C++ ----------------
@@ -189,6 +197,7 @@ CPPFLAGS += -Wundef
 #CPPFLAGS += -Wsign-compare
 CPPFLAGS += -Wa,-adhlns=$(<:%.cpp=$(OBJDIR)/%.lst)
 CPPFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
+CPPFLAGS += $(HWCONFIG)
 #CPPFLAGS += $(CSTANDARD)
 
 
@@ -393,11 +402,26 @@ ALL_ASFLAGS = -mmcu=$(MCU) -I. -x assembler-with-cpp $(ASFLAGS)
 
 default: all
 
+docs: docs_clean
+	doxygen Doxyfile
+
+docs_pdf: docs
+	make -C docs/latex
+
+docs_clean:
+	@rm -rf docs
+
+
+# Data-chan HW configuration defines
+DATACHAN_HWCONFIG = -DUSB_VID=$(USB_VID) -DUSB_PID=$(USB_PID) -DUSB_MANUFACTURER="L\"$(USB_MANUFACTURER)\"" -DUSB_NAME="L\"$(USB_NAME)\""
+export DATACHAN_HWCONFIG
+
+
 datachan_all:
 	make -C src/lib/data-chan/Device lib
 
 datachan_clean:
-		make -C src/lib/data-chan/Device clean
+	make -C src/lib/data-chan/Device clean
 
 # Default target.
 all: begin datachan_all gccversion sizebefore build sizeafter end

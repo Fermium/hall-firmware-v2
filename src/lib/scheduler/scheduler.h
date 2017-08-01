@@ -1,3 +1,10 @@
+/*!
+   \file scheduler.h
+   \brief Simple task scheduler and execution
+   \author Simone Tosato
+   \author Davide Bortolami
+   \copyright (c) 2017 - Fermium LABS srl
+*/
 #ifndef SCHEDULER_H
   #define SCHEDULER_H
 
@@ -12,15 +19,16 @@
   }
   #include "../adc/ads1115.h"
   #include "../heater/heater.h"
+  #include "../lock-in/lock-in.h"
+  #include "../pid/pid_controller.h"
+  #define NUMBER_OF_TASKS 5
 
-  #define NUMBER_OF_TASKS 4
-  void start_task(ADS1115*,ADS1115*,HEATER*);
 
-  //tasks
-  int task0(unsigned long, unsigned long);
-  int task1(unsigned long, unsigned long);
-  int task2(unsigned long, unsigned long);
-  int task3(unsigned long, unsigned long);
-  int task4(unsigned long, unsigned long);
-  int task5(unsigned long, unsigned long);
+  void start_task(ADS1115*,ADS1115*,HEATER*,LOCKIN*);
+  int task0(unsigned long);
+  int task1(unsigned long);
+  int task2(unsigned long);
+  int task3(unsigned long);
+  int task4(unsigned long);
+  int task5(unsigned long);
 #endif

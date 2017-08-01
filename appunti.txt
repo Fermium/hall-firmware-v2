@@ -1,1 +1,0 @@
-rimosso     //#include "BulkVendor.h" da custom.h

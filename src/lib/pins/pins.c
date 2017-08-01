@@ -1,11 +1,21 @@
-//example usage
-// portwrite (0x0A, 2, true)  //write high on PORTA2
-// portwrite (0x0B, 3, false) //write low on PORTB3
+/*!
+   \file pins.c
+   \brief simple abstraction library for basic I/O on AVR
+   \author Davide Bortolami
+   \copyright (c) 2017 - Fermium LABS srl
+*/
 #include <stdbool.h>
 #include <avr/io.h>
 #include "pins.h"
 
 
+
+/*!
+   \brief Write PORT register to set I/O
+   \param port The register to write to, in exadecimal. Example 0x0A for PORTA, 0x0C for PORTC
+   \param pin The pin of the PORT register to write to, from 0x00 to 0x07
+   \param outvalue The output value, true=1=HIGH or false=0=LOW
+*/
 void portwrite (char port, char pin, bool outvalue)
 {
   unsigned char set_pin = 1 << pin;
@@ -27,7 +37,12 @@ void portwrite (char port, char pin, bool outvalue)
   }
 }
 
-
+/*!
+   \brief Write DDR register to set I/O direction
+   \param port The register to write to, in exadecimal. Example 0x0A for PORTA, 0x0C for PORTC
+   \param pin The pin of the PORT register to write to, from 0x00 to 0x07
+   \param outvalue The direction of the I/O pin, DDR_INPUT or DDR_OUTPUT
+*/
 void ddrwrite (char port, char pin, bool outvalue)
 {
   unsigned char set_pin = 1 << pin;

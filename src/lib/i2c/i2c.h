@@ -1,3 +1,12 @@
+/*!
+   \file i2c.h
+   \brief I2C Serial comunication library
+   \author Varius Unknown authors
+	 \author Davide Bortolami
+	 \copyright Unknown authors
+	 \copyright (c) 2017 - Fermium LABS srl
+*/
+
 #ifndef FRM_I2C_H
 #define	FRM_I2C_H
 
@@ -8,9 +17,10 @@
 #include <util/twi.h>
 
 
-#define F_SCL 100000UL // SCL frequency
+#define F_SCL 100000UL /*!< SCL frequency */
+
 #define Prescaler 1
-#define TWBR_val ((((F_CPU / F_SCL) / Prescaler) - 16 ) / 2)
+#define TWBR_val ((((F_CPU / F_SCL) / Prescaler) - 16 ) / 2) /*!< the TWBR registers sets the speed of TWI comunication */
 
 void i2c_init(void);
 

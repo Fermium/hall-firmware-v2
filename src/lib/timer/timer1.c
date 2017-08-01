@@ -1,17 +1,13 @@
-/* Counting Milliseconds with Timer1
- * ---------------------------------
- * For more information see
- * http://www.adnbr.co.uk/articles/counting-milliseconds
- *
- * 620 bytes - ATmega168 - 16MHz
- */
+/*!
+   \file timer1.h
+   \brief Counting Milliseconds with Timer1
+   \author adnbr
+   \copyright adnbr
+*/
 
- #include "timer1.h"
+#include "timer1.h"
 
-
-// Calculate the value needed for
-// the CTC match value in OCR1A.
-#define CTC_MATCH_OVERFLOW  (( F_CPU / 1000) / 8)
+#define CTC_MATCH_OVERFLOW  (( F_CPU / 1000) / 8) /*!< Calculate the value needed for the CTC match value in OCR1A. */
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -19,11 +15,18 @@
 
 static unsigned long timer1_millis_counter = 0;
 
+/*!
+   \brief Interrupt Request Subroutine
+*/
 ISR (TIMER1_COMPA_vect)
 {
     timer1_millis_counter++;
 }
 
+/*!
+   \brief Get timer1 in milliseconds
+   \return timer1 in milliseconds
+*/
 unsigned long timer1_millis ()
 {
   unsigned long millis_return;
@@ -31,12 +34,15 @@ unsigned long timer1_millis ()
     // Ensure this cannot be disrupted
     ATOMIC_BLOCK(ATOMIC_FORCEON) {
         millis_return = timer1_millis_counter;
-
     }
 
     return millis_return;
 }
 
+/*!
+   \brief Initialize timer1
+   \return always returns 0
+*/
 int timer1_init(void)
 {
   // CTC mode, Clock/8
