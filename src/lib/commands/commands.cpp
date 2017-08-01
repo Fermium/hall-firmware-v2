@@ -14,7 +14,7 @@
    \note To obtain a decent precision, the values needs to be sent pre-calibrated
    \param current the input current, in A (Amperes)
 */
-void set_current_lockin(float current){
+void set_current_lockin(LOCKIN* ,float,float){
   if(fabs(current)<0.0006){
     max5805_set_to_middlescale();
   }
@@ -24,7 +24,14 @@ void set_current_lockin(float current){
     //max5805_codeload(current/2.5+0.5*max5805_getref());
   }
 }
-
+void set_current_fixed(float current){
+  if(fabs(current)<0.0006){
+    max5805_set_to_middlescale();
+  }
+  else{
+    max5805_codeload(current/2.5+0.5*max5805_getref());
+  }
+}
 /*!
    \brief Set the heater power
    \param heater the pointer to the heater's class istance

@@ -14,6 +14,7 @@ static ADS1115* adc1;
 static ADS1115* adc2;
 static HEATER* heater;
 static LOCKIN* lock;
+static unsigned long executionCycleCounter = 0; /*!< Counter incremented each execution cycle */
 //static PIDControl pid1(1.0,1.0,1.0,samp.time,min,max,AUTOMATIC,DIRECT);
 void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat,LOCKIN* Lock){
 /*!
