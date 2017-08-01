@@ -14,15 +14,10 @@
    \note To obtain a decent precision, the values needs to be sent pre-calibrated
    \param current the input current, in A (Amperes)
 */
-void set_current_lockin(LOCKIN* ,float,float){
-  if(fabs(current)<0.0006){
-    max5805_set_to_middlescale();
-  }
-  else{
+void set_current_lockin(LOCKIN* lock,float lower,float upper){
     lock->set_lower(lower);
     lock->set_upper(upper);
     //max5805_codeload(current/2.5+0.5*max5805_getref());
-  }
 }
 void set_current_fixed(float current){
   if(fabs(current)<0.0006){
