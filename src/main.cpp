@@ -15,6 +15,7 @@
 #include <math.h>
 #include "lib/adc/ads1115.h"
 #include "lib/heater/heater.h"
+#include "lib/lock-in/lock-in.h"
 #include "lib/scheduler/scheduler.h"
 #include "lib/led/led.h"
 #include "lib/commands/commands.h"
@@ -29,6 +30,7 @@ extern "C"{
 
 ADS1115 adc1;
 ADS1115 adc2;
+LOCKIN lock;
 HEATER heater(0x0C,6,255);
 LED led(0x0B,0,255);
 
@@ -49,7 +51,7 @@ void io_setup()
 		adc2.setaddress(ADS1115_ADDR_VDD);
 
     //HEATER
-		heater.set_duty_cycle(200);
+    	heater.set_duty_cycle(0);
 		heater.set_period_ms(1020);//2000ms
 		heater.enable();
 		/*led.enable();
@@ -95,12 +97,14 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 
 		 switch(command){
 
-			 case 0x01: //set_current_output
-			 		float state;
-					memcpy(&state,pointer,sizeof(float));
-					set_current_output(state);
-					_delay_ms(50);
-			 		break;
+			 case 0x01:
+			 	float lower;
+				float upper;
+				memcpy(&lower,pointer,sizeof(float));
+				pointer+=4;
+				memcpy(&upper,pointer,sizeof(float));
+				set_current_lockin(&lock,lower,upper);
+			 	break;
 
 			 case 0x02: //set_heater_state
 			 		uint8_t power;
@@ -108,26 +112,29 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 					set_heater_state(&heater,power);
 			 		break;
 
-			 case 0x03: //set_channel_gain
-					uint8_t channel,gain;
-					memcpy(&channel,pointer,sizeof(uint8_t));
-					pointer++;
-					memcpy(&gain,pointer,sizeof(uint8_t));
-					//we consider the channel from 0 to 15, where 0-7 is the first adc, 7-15 the last
-					if(channel/8 == 0){
-					set_channel_gain(&adc1,channel%8,gain);
-					}
-					else{
-					set_channel_gain(&adc2,channel%8,gain);
-					}
+			 case 0x03:
+				uint8_t channel,gain;
+				memcpy(&channel,pointer,sizeof(uint8_t));
+				pointer++;
+				memcpy(&gain,pointer,sizeof(uint8_t));
+				if(channel/4 == 0){
+					set_channel_gain(&adc1,channel,gain);
+				}
+				else{
+					set_channel_gain(&adc2,channel%4,gain);
+				}
+			 	break;
 
-			 		break;
+            case 0x04:
+				uint16_t current;
+				memcpy(&current,pointer,sizeof(uint16_t));
+				set_current_raw(current);
+				break;
 
-				case 0x04:
- 			 		uint16_t current;
- 					memcpy(&current,pointer,sizeof(uint16_t));
-					set_current_output_raw(current);
- 			 		break;
+
+				case 0x05:
+				io_setup();
+				break;
 
 		 }
 
@@ -144,6 +151,7 @@ void Event_Connected(void) {
    \brief IRS on usbdisconnection
 */
 void Event_Disconnected(void) {
+	// reset to avoid things burning up
 	io_setup();
 }
 
@@ -162,6 +170,6 @@ void Event_Init(void) {
 */
 void MainRoutine(void) {
 	if (datachan_output_enabled()) {
-				task(&adc1,&adc2,&heater);
+				start_task(&adc1,&adc2,&heater,&lock);
 		}
 }

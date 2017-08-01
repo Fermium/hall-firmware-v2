@@ -14,12 +14,14 @@
    \note To obtain a decent precision, the values needs to be sent pre-calibrated
    \param current the input current, in A (Amperes)
 */
-void set_current_output(float current){
+void set_current_lockin(float current){
   if(fabs(current)<0.0006){
     max5805_set_to_middlescale();
   }
   else{
-    max5805_codeload(current/2.5+0.5*max5805_getref());
+    lock->set_lower(lower);
+    lock->set_upper(upper);
+    //max5805_codeload(current/2.5+0.5*max5805_getref());
   }
 }
 
@@ -46,6 +48,6 @@ void set_channel_gain(ADS1115* adc,uint8_t channel,uint8_t gain){
    \note The raw code is used mostly for calibration and debugging
    \param current The current raw code
 */
-void set_current_output_raw(uint16_t current){
+void set_current_raw(uint16_t current){
     max5805_codeloadRaw(current);
 }

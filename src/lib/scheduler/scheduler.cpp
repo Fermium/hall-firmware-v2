@@ -13,24 +13,22 @@ static bool measure_ready=false;
 static ADS1115* adc1;
 static ADS1115* adc2;
 static HEATER* heater;
-
-
+static LOCKIN* lock;
+//static PIDControl pid1(1.0,1.0,1.0,samp.time,min,max,AUTOMATIC,DIRECT);
+void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat,LOCKIN* Lock){
 /*!
    \brief main execution task, containing other sub-task
    \param Adc1 Istance of ADC1, from main.cpp
    \param Adc2 Istance of ADC2, from main.cpp
    \param heat Istance of Heater, from main.cpp
 */
-void task(ADS1115* Adc1,ADS1115* Adc2,HEATER* heat){
   //unsigned long task = timer1_millis() % 8;
 
  adc1=Adc1; /*!< ADS1115 ADC 1 */
  adc2=Adc2; /*!< ADS1115 ADC 2 */
  heater=heat;
-
- static unsigned long executionCycleCounter = 0; /*!< Counter incremented each execution cycle */
+ lock = Lock;
  executionCycleCounter ++;
-
  static unsigned long lastExecution[NUMBER_OF_TASKS] = {0};
 
   switch(executionCycleCounter % NUMBER_OF_TASKS){
@@ -125,9 +123,7 @@ int task1(unsigned long fromLastExecution)
 */
 int task2(unsigned long fromLastExecution)
 {
-
   heater->evaluate();
-
 }
 
 /*!
@@ -137,7 +133,7 @@ int task2(unsigned long fromLastExecution)
 */
 int task3(unsigned long fromLastExecution)
 {
-
+  lock->evaluate();
 }
 
 /*!
