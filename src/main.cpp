@@ -56,6 +56,8 @@ void io_setup()
 				heater.set_period_ms(1020); //2000ms
 				heater.enable();
 
+				lock.reset();
+				lock.enable(false);
 				//LED
 				led.set_duty_cycle(200);
 			  led.set_period_ms(1020);//2000ms
@@ -110,7 +112,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 								set_current_lockin(&lock,lower,upper);
 								break;
 
-				case 0x02:  //set lockin current
+				case 0x02:  //set costant current
 								float current;
 								memcpy(&current,pointer,sizeof(float));
 								set_current_fixed(&lock,current);

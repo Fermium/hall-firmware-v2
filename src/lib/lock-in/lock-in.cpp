@@ -11,6 +11,7 @@
    \brief empty initializer
 */
 LOCKIN::LOCKIN(){
+  reset();
 }
 
 /*!
@@ -25,7 +26,7 @@ int LOCKIN::evaluate(){
                         float current;
                         current = (lockin_lower + lockin_upper) / 2; //get the average
                         if(fabs(current)<0.0006){
-                          shutdown();
+                          reset();
                         }
                         else{
                         max5805_codeload(current_to_voltage(current));
@@ -60,9 +61,9 @@ int LOCKIN::time_to_transition(){
 }
 
 /*!
-   \brief Immediate shutdown, reset and disabling of the current generator
+   \brief Immediate reset, reset and disabling of the current generator
  */
-void LOCKIN::shutdown(){
+void LOCKIN::reset(){
         this->enabled = false;
         this->lockin_lower = 0.0;
         this->lockin_upper = 0.0;

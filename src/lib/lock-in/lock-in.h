@@ -79,12 +79,12 @@
       /*!
          \brief Enable or disable the current generator
          \details A disabled current generator will attempt no action in changing the state of the D
-         \note Disabling the current generator does not shut it down! use shutdown() !
+         \note Disabling the current generator does not shut it down! use reset() !
          \param enabled true or false
       */
       void enable( unsigned char enabled){this->enabled = enabled;}
 
-      void shutdown();
+      void reset();
       int evaluate();
       int time_to_transition();
 

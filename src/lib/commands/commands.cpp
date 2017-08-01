@@ -17,11 +17,13 @@
 void set_current_lockin(LOCKIN* lock,float lower,float upper){
     lock->set_lockin_lower(lower);
     lock->set_lockin_upper(upper);
+    lock->enable(true);
     //max5805_codeload(current/2.5+0.5*max5805_getref());
 }
 
 void set_current_fixed(LOCKIN* lock,float current){
    lock->set_current(current);
+   lock->enable(true);
    lock->evaluate();
 }
 /*!
