@@ -104,7 +104,6 @@ int task0(unsigned long fromLastExecution)
 
 /*!
    \brief task1 - enqueue measures
-   \details register the measures in the data-chan queue
    \param fromLastExecution milliseconds past the last time the task was executed
    \return 0 if executed, 2 if not execute, 1 if errored
 */
@@ -120,7 +119,7 @@ int task1(unsigned long fromLastExecution)
 
 /*!
    \brief task2
-   \details takes one measure from each adc. Only if the transition of the heater (future or past) is more than 4ms away
+   \details Triggers the heater transition evaluation
    \param fromLastExecution milliseconds past the last time the task was executed
    \return 0 if executed, 2 if not execute, 1 if errored
 */
@@ -133,7 +132,6 @@ int task2(unsigned long fromLastExecution)
 
 /*!
    \brief task3
-   \details takes one measure from each adc. Only if the transition of the heater (future or past) is more than 4ms away
    \param fromLastExecution milliseconds past the last time the task was executed
    \return 0 if executed, 2 if not execute, 1 if errored
 */
@@ -144,7 +142,6 @@ int task3(unsigned long fromLastExecution)
 
 /*!
    \brief task4
-   \details takes one measure from each adc. Only if the transition of the heater (future or past) is more than 4ms away
    \param fromLastExecution milliseconds past the last time the task was executed
    \return 0 if executed, 2 if not execute, 1 if errored
 */
@@ -154,7 +151,6 @@ int task4(unsigned long fromLastExecution)
 }
 /*!
    \brief task5
-   \details takes one measure from each adc. Only if the transition of the heater (future or past) is more than 4ms away
    \param fromLastExecution milliseconds past the last time the task was executed
    \return 0 if executed, 2 if not execute, 1 if errored
 */
