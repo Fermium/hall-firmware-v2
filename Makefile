@@ -410,6 +410,13 @@ docs_pdf: docs
 docs_clean:
 	@rm -rf docs
 
+print_flags: default
+	echo "C Flags:"
+	@echo $(CFLAGS)
+	echo "CPP Flags:"
+	@echo $(CFLAGS)
+
+
 
 # Data-chan HW configuration defines
 DATACHAN_HWCONFIG = -DUSB_VID=$(USB_VID) -DUSB_PID=$(USB_PID) -DUSB_MANUFACTURER="L\"$(USB_MANUFACTURER)\"" -DUSB_NAME="L\"$(USB_NAME)\""
