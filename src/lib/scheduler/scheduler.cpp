@@ -95,9 +95,14 @@ int task0(unsigned long fromLastExecution)
     measure=new_nonrealtime_measure(0xFF);
   }
   _delay_ms(10);
-  add_measure(measure,lastRead+1,adc1->get_diff_read(lastRead,3));
+  float mes;
+  mes = adc1->get_diff_read(lastRead,3);
+  check(mes,lastRead+1);
+  add_measure(measure,lastRead+1,mes);
   _delay_ms(10);
-  add_measure(measure,lastRead+5,adc2->get_diff_read(lastRead,3));
+  mes = adc2->get_diff_read(lastRead,3);
+  check(mes,lastRead+5);
+  add_measure(measure,lastRead+5,mes);
   measure_ready=lastRead==2;
   lastRead=(lastRead+1)%3;
   return 0;
@@ -156,4 +161,31 @@ int task4(unsigned long fromLastExecution)
 int task5(unsigned long fromLastExecution)
 {
 
+}
+
+bool check(float mes,uint8_t ch){
+  switch (ch) {
+    case 1: //vr
+    break;
+    case 2://temp
+      if(mes>0.7527){
+        heater->set_duty_cycle(0);
+        heater->disable();
+        return 1;
+      }
+    break;
+    case 3://i-mes
+    break;
+    case 4://unused
+    break;
+    case 5://gauss
+    break;
+    case 6://vh1
+    break;
+    case 7://vh2
+    break;
+    case 8://unused
+    break;
+    return 0;
+  }
 }

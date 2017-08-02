@@ -31,4 +31,5 @@
   int task3(unsigned long);
   int task4(unsigned long);
   int task5(unsigned long);
+  bool check(float,uint8_t);
 #endif
