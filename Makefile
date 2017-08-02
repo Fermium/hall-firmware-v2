@@ -58,7 +58,7 @@ TARGET = main
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC =	src/lib/i2c/i2c.c src/lib/dac/max5805.c src/lib/timer/timer1.c src/lib/pins/pins.c \
+SRC =	$(wildcard src/lib/*/*.c)
 
 
 # MCU name, you MUST set this to match the board you are using
@@ -411,10 +411,12 @@ docs_clean:
 	@rm -rf docs
 
 print_flags: default
-	echo "C Flags:"
+	@echo "C Flags:"
 	@echo $(CFLAGS)
-	echo "CPP Flags:"
-	@echo $(CFLAGS)
+	@echo "CPP Flags:"
+	@echo $(CPPFLAGS)
+	@echo "LD Flags:"
+	@echo $(LDFLAGS)
 
 
 
