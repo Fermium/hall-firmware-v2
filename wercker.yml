@@ -15,7 +15,7 @@ build:
 deploy:
   steps:
     - install-packages:
-        packages: git wget python s3cmd
+        packages: s3cmd
     - script:
         name: "Push firmware build to S3 by project name, branch, hash"
         code: |
@@ -26,13 +26,12 @@ deploy-docs:
   box: fermiumlabs/latex-docker
   steps:
     - install-packages:
-        packages: git wget python doxygen make
+        packages: git wget python doxygen make s3cmd
     - script:
         name: "Build docs"
         code: |
             make docs
             make docs_pdf
-
     - script:
         name: "Push firmware build to S3 by project name, branch, hash"
         code: |
