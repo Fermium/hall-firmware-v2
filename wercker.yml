@@ -2,13 +2,24 @@ box: ubuntu:xenial
 build:
   steps:
     - install-packages:
-        packages: gcc-avr avr-libc avrdude make git clang doxygen
+        packages: gcc-avr avr-libc make git doxygen
     - script:
         name: initialize git submodules
-        code: git submodule update --init --recursive
+        code: #git submodule update --init --recursive
     - script:
         name: Compile
         code: make
     - script:
         name: Build html docs
         code: make docs
+deploy:
+  steps:
+    - install-packages:
+        packages: git
+    - edgecaseadmin/install-aws-cli:
+        key: $AWS_ACCESS_KEY_ID
+        secret: $AWS_SECRET_ACCESS_KEY
+    - script:
+        name: "Push firmware build to S3 by project name, branch, hash"
+        code: |
+            aws s3 main.hex s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/main.hex
