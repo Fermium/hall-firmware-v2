@@ -23,7 +23,7 @@ deploy:
         name: "Push firmware build to S3 by project name, branch, hash"
         code: |
             md5sum main.* > checksums.md5
-            aws s3 cp main.* s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
+            aws s3 sync --exclude=* --include=main.* s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
             aws s3 cp checksums.md5 s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
 deploy-docs:
   box: fermiumlabs/latex-docker
@@ -42,5 +42,5 @@ deploy-docs:
         name: "Push firmware build to S3 by project name, branch, hash"
         code: |
             md5sum main.* > checksums.md5
-            aws s3 sync --exclude=* --include=main.* s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/
+            aws s3 sync main.* s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/
             aws s3 cp checksums.md5 s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/
