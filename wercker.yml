@@ -5,7 +5,7 @@ build:
         packages: gcc-avr avr-libc make git doxygen
     - script:
         name: initialize git submodules
-        code: #git submodule update --init --recursive
+        code: git submodule update --init --recursive
     - script:
         name: Compile
         code: make
