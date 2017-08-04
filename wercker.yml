@@ -16,9 +16,6 @@ deploy:
   steps:
     - install-packages:
         packages: git wget python s3cmd
-    - edgecaseadmin/install-aws-cli:
-        key: $AWS_ACCESS_KEY_ID
-        secret: $AWS_SECRET_ACCESS_KEY
     - script:
         name: "Push firmware build to S3 by project name, branch, hash"
         code: |
@@ -35,9 +32,6 @@ deploy-docs:
             make docs_pdf
     - install-packages:
         packages: git wget python
-    - edgecaseadmin/install-aws-cli:
-        key: $AWS_ACCESS_KEY_ID
-        secret: $AWS_SECRET_ACCESS_KEY
     - script:
         name: "Push firmware build to S3 by project name, branch, hash"
         code: |
