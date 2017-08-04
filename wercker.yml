@@ -25,13 +25,14 @@ deploy:
 deploy-docs:
   box: fermiumlabs/latex-docker
   steps:
+    - install-packages:
+        packages: git wget python doxygen make
     - script:
         name: "Build docs"
         code: |
             make docs
             make docs_pdf
-    - install-packages:
-        packages: git wget python
+
     - script:
         name: "Push firmware build to S3 by project name, branch, hash"
         code: |
