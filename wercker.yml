@@ -15,11 +15,13 @@ build:
 deploy:
   steps:
     - install-packages:
-        packages: git wget
+        packages: git wget python
     - edgecaseadmin/install-aws-cli:
         key: $AWS_ACCESS_KEY_ID
         secret: $AWS_SECRET_ACCESS_KEY
     - script:
         name: "Push firmware build to S3 by project name, branch, hash"
         code: |
-            aws s3 main.hex s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/main.hex
+            md5sum main.* > checksums.md5
+            aws s3 main.* s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
+            aws s3 checksums.md5 s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
