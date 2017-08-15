@@ -25,5 +25,6 @@ docs/
 build-tmp/
 bin/*/
 *.c.*
+
 default
 .wercker/

@@ -1,0 +1,8 @@
+{
+  "execPath": "avr-gcc",
+  "gccDefaultCFlags": "-gdwarf-2 -c -DF_CPU=16000000UL -Os -funsigned-char -funsigned-bitfields -ffunction-sections -fpack-struct -fshort-enums -Wall -Wstrict-prototypes -Wa,-adhlns=default -std=gnu99",
+  "gccDefaultCppFlags": "-gdwarf-2 -c -DF_CPU=16000000UL -Os -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -fno-exceptions -Wall -Wundef -Wa,-adhlns=default",
+  "gccErrorLimit": 15,
+  "gccIncludePaths": "./, lib/**/, /usr/lib/avr/include/**/, /usr/lib/avr/lib/**/",
+  "gccSuppressWarnings": false
+}
