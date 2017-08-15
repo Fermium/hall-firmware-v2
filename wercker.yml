@@ -2,7 +2,7 @@ box: ubuntu:xenial
 build:
   steps:
     - install-packages:
-        packages: gcc-avr avr-libc avrdude make git clang doxygen
+        packages: gcc-avr avr-libc make git doxygen
     - script:
         name: initialize git submodules
         code: git submodule update --init --recursive
@@ -12,3 +12,29 @@ build:
     - script:
         name: Build html docs
         code: make docs
+deploy:
+  steps:
+    - install-packages:
+        packages: s3cmd
+    - script:
+        name: "Push firmware build to S3 by project name, branch, hash"
+        code: |
+            md5sum main.* > checksums.md5
+            s3cmd put --no-check-certificate  main.* s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
+            s3cmd put --no-check-certificate checksums.md5 s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
+deploy-docs:
+  box: fermiumlabs/latex-docker
+  steps:
+    - install-packages:
+        packages: s3cmd graphviz
+    - script:
+        name: "Build docs"
+        code: |
+            make docs
+            make docs_pdf
+    - script:
+        name: "Push firmware build to S3 by project name, branch, hash"
+        code: |
+            md5sum main.* > checksums.md5
+            s3cmd put -r docs/html/ s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/
+            s3cmd put  docs/latex/refman.pdf s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/docs.pdf
