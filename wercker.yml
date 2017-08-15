@@ -13,6 +13,7 @@ build:
         name: Build html docs
         code: make docs
 deploy:
+  box: ubuntu:yakkety
   steps:
     - install-packages:
         packages: s3cmd
@@ -23,6 +24,7 @@ deploy:
             s3cmd put main.* s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
             s3cmd put checksums.md5 s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
 deploy-docs:
+  box: ubuntu:yakkety
   box: fermiumlabs/latex-docker
   steps:
     - install-packages:
