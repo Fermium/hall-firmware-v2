@@ -33,6 +33,7 @@ build-edge:
     - script:
         name: Build html docs
         code: make docs
+
 deploy:
   steps:
     - install-packages:
@@ -43,6 +44,7 @@ deploy:
             md5sum main.* > checksums.md5
             s3cmd put --no-check-certificate  main.* s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
             s3cmd put --no-check-certificate checksums.md5 s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
+
 deploy-docs:
   box: fermiumlabs/latex-docker
   steps:
