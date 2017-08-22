@@ -1,4 +1,5 @@
 box: ubuntu:xenial
+
 build:
   steps:
     - install-packages:
@@ -12,6 +13,28 @@ build:
     - script:
         name: Build html docs
         code: make docs
+
+build-edge:
+  box: dock0/arch
+  steps:
+    - script:
+        name: Install dependencies
+        code: |
+          sudo pacman --noconfirm -S avr-gcc avr-libc avr-binutils libusb make doxygen graphviz git autogen autoconf clang avrdude python-pip
+          sudo pip install mkdocs
+    - script:
+        name: initialize git submodules
+        code: git submodule update --init --recursive
+    - script:
+        name: Clean
+        code: make clean
+    - script:
+        name: Compile
+        code: make
+    - script:
+        name: Build html docs
+        code: make docs
+
 deploy:
   steps:
     - install-packages:
@@ -22,6 +45,7 @@ deploy:
             md5sum main.* > checksums.md5
             s3cmd put --no-check-certificate  main.* s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
             s3cmd put --no-check-certificate checksums.md5 s3://fermiumlabs-firmware-builds/$WERCKER_GIT_REPOSITORY/$WERCKER_GIT_BRANCH/$WERCKER_GIT_COMMIT/
+
 deploy-docs:
   box: fermiumlabs/latex-docker
   steps:
