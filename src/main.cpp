@@ -9,10 +9,22 @@
 
 #define F_CPU 16000000UL /*!< CPU clock frequency */
 
+
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include <stdbool.h>
 #include <math.h>
+
+#if DUMMY == true
+	#warning "The firmware is in dummy mode. Useful just for testing on dev boards"
+#endif
+#ifndef DUMMY
+	#define DUMMY false
+#endif
+
+#define DUMMY true
+
 #include "lib/adc/ads1115.h"
 #include "lib/heater/heater.h"
 #include "lib/cgen/cgen.h"
@@ -40,27 +52,29 @@ LED led(0x0B,0);
 
 void io_setup()
 {
-				//DAC
-				max5805_init(0x36);
-				max5805_setref(2.5);
-				max5805_set_to_middlescale();
-				max5805_outenable(true);
+				if(!DUMMY) {
+								//DAC
+								max5805_init(0x36);
+								max5805_setref(2.5);
+								max5805_set_to_middlescale();
+								max5805_outenable(true);
 
-				//ADC
-				adc1.setaddress(ADS1115_ADDR_GND);
-				adc2.setaddress(ADS1115_ADDR_VDD);
+								//ADC
+								adc1.setaddress(ADS1115_ADDR_GND);
+								adc2.setaddress(ADS1115_ADDR_VDD);
 
-				//HEATER
-				heater.set_duty_cycle(0);
-				heater.set_period_ms(1020); //2000ms
-				heater.enable();
+								//HEATER
+								heater.set_duty_cycle(0);
+								heater.set_period_ms(1020); //2000ms
+								heater.enable();
 
-				cgen.reset();
-				cgen.enable(false);
-				//LED
-				led.set_duty_cycle(200);
-			  led.set_period_ms(1020);//2000ms
-				led.enable();
+								cgen.reset();
+								cgen.enable(false);
+								//LED
+								led.set_duty_cycle(200);
+								led.set_period_ms(1020);//2000ms
+								led.enable();
+				}
 }
 
 /*!
@@ -73,7 +87,6 @@ int main(void)
 				main_setup(); //data-chan setup
 				timer1_init();
 				io_setup();
-
 				while (1)
 				{
 								main_loop(); //data-chan event processing
@@ -107,29 +120,39 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 								memcpy(&lower,pointer,sizeof(float));
 								pointer+=4;
 								memcpy(&upper,pointer,sizeof(float));
-								cgen.set_lockin_lower(lower);
-						    cgen.set_lockin_upper(upper);
-						    cgen.enable(true);
+								if (!DUMMY)
+								{
+												cgen.set_lockin_lower(lower);
+												cgen.set_lockin_upper(upper);
+												cgen.enable(true);
+								}
 								break;
 
 				case 0x02:  //set costant current
 								float current;
 								memcpy(&current,pointer,sizeof(float));
-								cgen.set_current(current);
-						    cgen.enable(true);
-						    cgen.evaluate();
+								if (!DUMMY) {
+												cgen.set_current(current);
+												cgen.enable(true);
+												cgen.evaluate();
+								}
 								break;
 
 				case 0x03:   //set raw current
 								uint16_t current_raw;
 								memcpy(&current_raw,pointer,sizeof(uint16_t));
-								max5805_codeloadRaw(current_raw);
+								if (!DUMMY)
+								{
+												max5805_codeloadRaw(current_raw);
+								}
 								break;
 
 				case 0x04: //set_heater_state
 								uint8_t power;
 								memcpy(&power,pointer,sizeof(uint8_t));
-								heater.set_duty_cycle(power);
+								if (!DUMMY) {
+												heater.set_duty_cycle(power);
+								}
 								break;
 
 				case 0x05: //set channel gain
@@ -137,16 +160,21 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
 								memcpy(&channel,pointer,sizeof(uint8_t));
 								pointer++;
 								memcpy(&gain,pointer,sizeof(uint8_t));
-								if(channel/4 == 0) {
-												adc1.setrange(channel,gain);
-								}
-								else{
-												adc2.setrange(channel%4,gain);
+								if (!DUMMY) {
+												if(channel/4 == 0) {
+																adc1.setrange(channel,gain);
+												}
+												else{
+																adc2.setrange(channel%4,gain);
+												}
 								}
 								break;
 
 				case 0x06:  //reset
-								io_setup();
+								if (!DUMMY)
+								{
+									io_setup();
+								}
 								break;
 
 				}
@@ -183,6 +211,6 @@ void Event_Init(void) {
  */
 void MainRoutine(void) {
 				if (datachan_output_enabled()) {
-								start_task(&adc1,&adc2,&heater,&cgen,&led);
+								run_tasks(&adc1,&adc2,&heater,&cgen,&led);
 				}
 }
