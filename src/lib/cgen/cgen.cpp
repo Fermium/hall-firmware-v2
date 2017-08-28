@@ -11,7 +11,7 @@
    \brief empty initializer
 */
 CGEN::CGEN(){
-  reset();
+  //reset();
 }
 
 /*!
