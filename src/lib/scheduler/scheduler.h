@@ -15,8 +15,6 @@
   	#define DUMMY false
   #endif
 
-  #define DUMMY true
-
   #include <stdio.h>
   #include <stdlib.h>
   #include <stdint.h>

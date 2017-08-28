@@ -51,6 +51,9 @@ USB_PID = 0x0C9B
 USB_MANUFACTURER = Fermium LABS srl
 USB_NAME = Hall Effect Apparatus
 
+# if dummy is "true", the code will run as a dummy device with no external ICs (dac, adc, i2c, SPI etc etc)
+DUMMY = true
+
 #----------------------------------------------------------------------------
 
 # Target file name (without extension).
@@ -171,7 +174,6 @@ CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 CFLAGS += $(CSTANDARD)
 CFLAGS += $(HWCONFIG)
 
-
 #---------------- Compiler Options C++ ----------------
 #  -g*:          generate debugging information
 #  -O*:          optimization level
@@ -197,6 +199,7 @@ CPPFLAGS += -Wundef
 CPPFLAGS += -Wa,-adhlns=$(<:%.cpp=$(OBJDIR)/%.lst)
 CPPFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 CPPFLAGS += $(HWCONFIG)
+CPPFLAGS += -DDUMMY=$(DUMMY)
 #CPPFLAGS += $(CSTANDARD)
 
 
@@ -412,7 +415,7 @@ docs_clean:
 
 
 # Data-chan HW configuration defines
-DATACHAN_HWCONFIG = -DUSB_VID=$(USB_VID) -DUSB_PID=$(USB_PID) -DUSB_MANUFACTURER="L\"$(USB_MANUFACTURER)\"" -DUSB_NAME="L\"$(USB_NAME)\""
+DATACHAN_HWCONFIG = -DUSB_VID=$(USB_VID) -DUSB_PID=$(USB_PID) -DUSB_MANUFACTURER="L\"$(USB_MANUFACTURER)\"" -DUSB_NAME="L\"$(USB_NAME)\"" -DDUMMY=$(DUMMY)
 export DATACHAN_HWCONFIG
 
 
@@ -474,7 +477,7 @@ gccversion :
 
 
 # Program the device.
-program: $(TARGET).hex $(TARGET).eep
+program: default $(TARGET).hex $(TARGET).eep
 	$(AVRDUDE) $(AVRDUDE_FLAGS) $(AVRDUDE_WRITE_FLASH) $(AVRDUDE_WRITE_EEPROM)
 
 

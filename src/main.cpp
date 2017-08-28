@@ -23,7 +23,6 @@
 	#define DUMMY false
 #endif
 
-#define DUMMY true
 
 #include "lib/adc/ads1115.h"
 #include "lib/heater/heater.h"
@@ -68,8 +67,10 @@ void io_setup()
 								heater.set_period_ms(1020); //2000ms
 								heater.enable();
 
+								//CURRENT GENERATOR
 								cgen.reset();
 								cgen.enable(false);
+
 								//LED
 								led.set_duty_cycle(200);
 								led.set_period_ms(1020);//2000ms
