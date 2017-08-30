@@ -23,7 +23,6 @@
 	#define DUMMY false
 #endif
 
-
 #include "lib/adc/ads1115.h"
 #include "lib/heater/heater.h"
 #include "lib/cgen/cgen.h"

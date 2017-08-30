@@ -6,6 +6,12 @@
    \copyright (c) 2017 - Fermium LABS srl
  */
 #include "scheduler.h"
+#if DUMMY == true
+  #warning "The firmware is in dummy mode. Useful just for testing on dev boards"
+#endif
+#ifndef DUMMY
+  #define DUMMY false
+#endif
 
 static measure_t* measure; /*!< data-chan measure istance */
 static bool measure_ready = false; /*!< atomic variable to flip if the measure is ready  */

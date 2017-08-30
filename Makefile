@@ -52,7 +52,7 @@ USB_MANUFACTURER = Fermium LABS srl
 USB_NAME = Hall Effect Apparatus
 
 # if dummy is "true", the code will run as a dummy device with no external ICs (dac, adc, i2c, SPI etc etc)
-DUMMY = true
+DUMMY = false
 
 #----------------------------------------------------------------------------
 
@@ -173,6 +173,7 @@ CFLAGS += -Wa,-adhlns=$(<:%.c=$(OBJDIR)/%.lst)
 CFLAGS += $(patsubst %,-I%,$(EXTRAINCDIRS))
 CFLAGS += $(CSTANDARD)
 CFLAGS += $(HWCONFIG)
+CFLAGS += -DDUMMY=$(DUMMY)
 
 #---------------- Compiler Options C++ ----------------
 #  -g*:          generate debugging information
@@ -415,7 +416,7 @@ docs_clean:
 
 
 # Data-chan HW configuration defines
-DATACHAN_HWCONFIG = -DUSB_VID=$(USB_VID) -DUSB_PID=$(USB_PID) -DUSB_MANUFACTURER="L\"$(USB_MANUFACTURER)\"" -DUSB_NAME="L\"$(USB_NAME)\"" -DDUMMY=$(DUMMY)
+DATACHAN_HWCONFIG = -DUSB_VID=$(USB_VID) -DUSB_PID=$(USB_PID) -DUSB_MANUFACTURER="L\"$(USB_MANUFACTURER)\"" -DUSB_NAME="L\"$(USB_NAME)\""
 export DATACHAN_HWCONFIG
 
 
