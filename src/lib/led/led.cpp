@@ -57,5 +57,6 @@ void LED::enable(){
 */
 void LED::disable(){
   this->state = false;
+  this->duty_cycle =  0;
   portwrite(this->port,this->pin,false);
 }
