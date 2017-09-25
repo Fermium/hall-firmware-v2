@@ -29,6 +29,8 @@ LED::LED(uint8_t port,uint8_t pin){
    \return 0 if the led state was enabled, regardless if transition happened or not. 1 if the led was disabled
 */
 int LED::evaluate(){
+  this->last_evaluation = timer1_millis();
+
   if(this->state){
     if((timer1_millis()/(this->period/this->full_scale)) % full_scale>this->duty_cycle ){
       portwrite(this->port,this->pin,false);
@@ -44,6 +46,7 @@ int LED::evaluate(){
   return 1;
 }
 
+
 /*!
    \brief Enable the led. evaluate() will start working for now on
    \note This function does not necessarily power on the led
@@ -57,6 +60,36 @@ void LED::enable(){
 */
 void LED::disable(){
   this->state = false;
+  portwrite(this->port,this->pin,false);
+}
+
+/*!
+   \brief Shortcut to turn on the led
+*/
+void LED::on(){
+  this->state = false;
+  this->duty_cycle =  full_scale;
+  portwrite(this->port,this->pin,true);
+}
+
+/*!
+\brief Shortcut to turn off the led
+*/
+void LED::off(){
+  this->state = false;
   this->duty_cycle =  0;
   portwrite(this->port,this->pin,false);
+
+}
+
+
+
+/*!
+\brief Turn off if it has not been running for 4 cycles
+*/
+void LED::watchdog(){
+  if ((timer1_millis() - this->last_evaluation) > (this->period*2))
+  {
+    this->disable();
+  }
 }

@@ -31,6 +31,9 @@ HEATER::HEATER(uint8_t port,uint8_t pin){
    \return 0 if the heater state was enabled, regardless if transition happened or not. 1 if the heater was disabled
 */
 int HEATER::evaluate(){
+
+  this->last_evaluation = timer1_millis();
+
   if(this->state){
     if((timer1_millis()/(this->period/this->full_scale)) % full_scale>this->duty_cycle ){
       portwrite(this->port,this->pin,false);
@@ -70,4 +73,14 @@ void HEATER::disable(){
 int HEATER::time_to_transition(){
   int t = (timer1_millis()/(this->period/this->full_scale)) % full_scale;
   return fmin(fabs(t-this->duty_cycle), fmin(t,full_scale-t)) * (this->period/this->full_scale);
+}
+
+/*!
+\brief Turn off if it has not been running for 4 cycles
+*/
+void HEATER::watchdog(){
+  if ((timer1_millis() - this->last_evaluation) > (this->period*2))
+  {
+    this->disable();
+  }
 }

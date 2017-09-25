@@ -59,8 +59,8 @@ void io_setup()
 				cgen.enable(false);
 
 				//LED
-				led.disable();
-
+				led.enable();
+				led.off();
 
 }
 
@@ -78,6 +78,9 @@ int main(void)
 				while (1)
 				{
 								main_loop(); //data-chan event processing
+								led.watchdog();
+								heater.watchdog();
+
 				}
 				return 0;
 }
@@ -158,7 +161,8 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
    \brief IRS on usb connection
 */
 void Event_Connected(void) {
-				//io_setup();
+				io_setup();
+				led.on();
 }
 
 /*!
@@ -167,6 +171,7 @@ void Event_Connected(void) {
 void Event_Disconnected(void) {
 				// reset to avoid things burning up
 				io_setup();
+				led.off();
 }
 
 /*!
@@ -179,7 +184,7 @@ void Event_Init(void) {
 
 /*!
    \brief Data-chan main routine
-   \details This routine is to be considered an event-loop, executed only when the usb is connected
+   \details This routine is to be considered an event-loop
    \details When this is running, the instrument is acquiring data
    \note do not mess with data-chan outside of this, it may be not sending data and it's buffer can overflow quite easly
  */
@@ -187,9 +192,11 @@ void MainRoutine(void) {
 				if (datachan_output_enabled()) {
 								//Start the led quick blinking
 								led.set_duty_cycle(127);
-								led.set_period_ms(1000);//2000ms
+								led.set_period_ms(1000);
 								led.enable();
+								led.evaluate();
 								run_tasks(&adc1,&adc2,&heater,&cgen,&led);
 				}
+
 
 }
