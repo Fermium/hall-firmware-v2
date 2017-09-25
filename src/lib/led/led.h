@@ -24,7 +24,7 @@
       uint16_t period; /*!< Time in milliseconds it takes to complete a full cycle */
       const static uint16_t full_scale = 255; /*!< Max value of the duty cycle, to be considere an always-on state. Usually 100 or 255 */
       bool state; /*!< Present state of the Heater, true for ON, false for OFF */
-
+      uint16_t last_evaluation = 0; /*!< last time the heater state was evaluated */
 
     public :
       LED(uint8_t port,uint8_t pin);
@@ -87,6 +87,11 @@
       int evaluate();
       void enable();
       void disable();
+      void on();
+      void off();
+      void watchdog();
+
   };
+
 
 #endif

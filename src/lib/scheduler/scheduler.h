@@ -24,7 +24,7 @@
   #define NUMBER_OF_TASKS 5
 
 
-  void start_task(ADS1115* ,ADS1115* ,HEATER* ,CGEN* ,LED* );
+  void run_tasks(ADS1115* ,ADS1115* ,HEATER* ,CGEN* ,LED* );
   int task0(unsigned long);
   int task1(unsigned long);
   int task2(unsigned long);
