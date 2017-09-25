@@ -10,6 +10,7 @@
 #define F_CPU 16000000UL /*!< CPU clock frequency */
 
 #include <avr/io.h>
+#include <avr/wdt.h>
 #include <util/delay.h>
 #include <stdbool.h>
 #include <math.h>
@@ -18,6 +19,7 @@
 #include "lib/cgen/cgen.h"
 #include "lib/scheduler/scheduler.h"
 #include "lib/led/led.h"
+
 
 extern "C" {
 	#include "lib/pins/pins.h"
@@ -40,6 +42,11 @@ LED led(0x0B,0);
 
 void io_setup()
 {
+
+				//WATCHDOG
+				wdt_reset();
+				wdt_enable(WDTO_2S);
+
 				//DAC
 				max5805_init(0x36);
 				max5805_setref(2.5);
@@ -64,6 +71,17 @@ void io_setup()
 
 }
 
+void fire_extinguisher()
+{
+	//shutdown the led if it hadn't been evaluated recently
+	led.watchdog();
+	//shutdown the heater if it was not evaluated recently
+	heater.watchdog();
+	//all is ok, reset the watchdog timer
+	wdt_reset();
+
+}
+
 /*!
    \brief main function
    \details contains the setup of data-chan, the initialization of the timer to be done after data-chan, the initialization of the I/O and the main event loop
@@ -78,9 +96,7 @@ int main(void)
 				while (1)
 				{
 								main_loop(); //data-chan event processing
-								led.watchdog();
-								heater.watchdog();
-
+								fire_extinguisher(); //check nothing is on fire
 				}
 				return 0;
 }
