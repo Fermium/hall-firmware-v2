@@ -81,28 +81,50 @@ void start_task(ADS1115* Adc1,ADS1115* Adc2,HEATER* Heater,CGEN* Cgen,LED* Led){
 
 /*!
    \brief task0 - measure
-   \details takes one measure from each adc. Only if the transition of the heater (future or past) is more than 4ms away
+   \details takes one measure from each adc
    \param fromLastExecution milliseconds past the last time the task was executed
    \return 0 if executed, 2 if not execute, 1 if errored
 */
 int task0(unsigned long fromLastExecution)
 {
   static uint8_t lastRead=0;
-  if(fromLastExecution<fmax(adc1->getsperiod_ms(),adc2->getsperiod_ms())&&heater->time_to_transition()<4){
+
+  // if too little time passed from the heater transition or the ADC did not have time to sample the measures accordingly
+  if(fromLastExecution < fmax(adc1->getsperiod_ms() , adc2->getsperiod_ms()) && heater->time_to_transition() < 4){
     return 2;
   }
+
+  //if the last read was resetted, allocate a new data-chan measure
   if(lastRead==0){
     measure=new_nonrealtime_measure(0xFF);
   }
+
   _delay_ms(10);
+
   float mes;
+
+  /*
+  Data-chan structure channels
+  1 - differential read ADC1 between Vr and 2.5V
+  2 - differential read ADC1 between Temp and 2.5V
+  3 - differential read ADC1 between I_meas and 2.5V
+  4 - not used
+  5 - differential read ADC2 between Vh (grounded) and 2.5V
+  6 - differential read ADC2 between Vh Ampl. and 2.5V
+  7 - differential read ADC2 between the Gaussmeter and 2.5V
+  8 - not used
+  */
+
   mes = adc1->get_diff_read(lastRead,3);
   check(mes,lastRead+1);
   add_measure(measure,lastRead+1,mes);
+
   _delay_ms(10);
+
   mes = adc2->get_diff_read(lastRead,3);
   check(mes,lastRead+5);
   add_measure(measure,lastRead+5,mes);
+
   measure_ready=lastRead==2;
   lastRead=(lastRead+1)%3;
   return 0;
@@ -125,7 +147,7 @@ int task1(unsigned long fromLastExecution)
 
 /*!
    \brief task2
-   \details Triggers the heater transition evaluation
+   \details Triggers the heater transition evaluation and other similar tasks
    \param fromLastExecution milliseconds past the last time the task was executed
    \return 0 if executed, 2 if not execute, 1 if errored
 */
@@ -163,9 +185,16 @@ int task5(unsigned long fromLastExecution)
 
 }
 
+/*!
+   \brief safety measures
+   \details Checks whether all measures are in-parameter, otherwise shutdown down what needs to be shut down.
+   \param mes the input measurement, in float
+   \param ch the channel the measure refers to
+   \return 0 if executed, 2 if not execute, 1 if errored
+*/
 bool check(float mes,uint8_t ch){
   switch (ch) {
-    case 1: //vr
+    case 1:
     break;
     case 2://temp
       if(mes>0.7527){
@@ -174,17 +203,17 @@ bool check(float mes,uint8_t ch){
         return 1;
       }
     break;
-    case 3://i-mes
+    case 3:
     break;
-    case 4://unused
+    case 4:
     break;
-    case 5://gauss
+    case 5:
     break;
-    case 6://vh1
+    case 6:
     break;
-    case 7://vh2
+    case 7:
     break;
-    case 8://unused
+    case 8:
     break;
     return 0;
   }
