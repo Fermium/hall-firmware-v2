@@ -20,10 +20,10 @@
       uint8_t port; /*!< port register on the MCU, in exadecimal. Example PORTA = 0x0A */
       uint8_t pin; /*!< pin of the port register from 0x00 to 0x07 */
       uint8_t duty_cycle; /*!< Expected duty cycle from 0 to full_scale */
-      uint16_t period; /*!< Time in milliseconds it takes to complete a full cycle */
-      const static uint16_t full_scale = 255; /*!< Max value of the duty cycle, to be considere an always-on state. Usually 100 or 255 */
+      unsigned long period; /*!< Time in milliseconds it takes to complete a full cycle */
+      const static unsigned long full_scale = 255; /*!< Max value of the duty cycle, to be considere an always-on state. Usually 100 or 255 */
       bool state; /*!< Present state of the Heater, true for ON, false for OFF */
-      uint16_t last_evaluation = 0; /*!< last time the heater state was evaluated */
+      unsigned long last_evaluation = timer1_millis(); /*!< last time the heater state was evaluated */
 
     public :
       HEATER(uint8_t port,uint8_t pin);
@@ -51,17 +51,17 @@
         \brief Set the period on which full_scale is applied
         \param period The period of a full transition cycle, in milliseconds
       */
-      void set_period_ms(uint16_t period){ this->period = period; }
+      void set_period_ms(unsigned long period){ this->period = period; }
       /*!
       \brief Get the period on which full_scale is applied
       \return The period of a full transition cycle, in milliseconds
 	  */
-      uint16_t get_period_ms(){ return this->period; }
+      unsigned long get_period_ms(){ return this->period; }
       /*!
       \brief Get the frequency of a full cycle
       \return the frequency of a full cycle, in Hz
 	  */
-      uint16_t get_frequency(){ return 1/((float)this->period/1000); }
+      unsigned long get_frequency(){ return 1/((float)this->period/1000); }
       /*!
          \brief Set the duty cycle
          \note The duty cycle is the moment, between 0 and full_scale at which the transition happens

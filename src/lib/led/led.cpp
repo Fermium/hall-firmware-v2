@@ -88,7 +88,7 @@ void LED::off(){
 \brief Turn off if it has not been running for 4 cycles
 */
 void LED::watchdog(){
-  if ((timer1_millis() - this->last_evaluation) > (this->period*2))
+  if ((timer1_millis() - this->last_evaluation) > 10000UL)
   {
     this->disable();
   }

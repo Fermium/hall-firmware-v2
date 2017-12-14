@@ -62,6 +62,7 @@ void HEATER::enable(){
 */
 void HEATER::disable(){
   this->state = false;
+  this->duty_cycle = 0;
   portwrite(this->port,this->pin,false);
 }
 
@@ -79,7 +80,7 @@ int HEATER::time_to_transition(){
 \brief Turn off if it has not been running for 4 cycles
 */
 void HEATER::watchdog(){
-  if ((timer1_millis() - this->last_evaluation) > (this->period*2))
+  if ((timer1_millis() - this->last_evaluation) > 30000UL)
   {
     this->disable();
   }

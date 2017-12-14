@@ -30,7 +30,7 @@
   class CGEN {
     private:
 
-      uint16_t period_start;
+      unsigned long period_start;
 
       float  lockin_lower = 0.0; /*!< lower current bound, amperes */
       float  lockin_upper = 0.0; /*!< upper current bound, amperes */
