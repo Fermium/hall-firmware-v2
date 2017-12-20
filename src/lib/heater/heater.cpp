@@ -18,9 +18,11 @@ HEATER::HEATER(uint8_t port,uint8_t pin){
   this->duty_cycle =  0;
   this->pin = pin;
   this->port = port;
+  this->period = 1020;
   this->state = false;
   portwrite(this->port,this->pin,false);
   ddrwrite(this->port,this->pin,DDR_OUTPUT);
+  this->last_evaluation = timer1_millis();
 }
 
 
@@ -80,7 +82,7 @@ int HEATER::time_to_transition(){
 \brief Turn off if it has not been running for 4 cycles
 */
 void HEATER::watchdog(){
-  if ((timer1_millis() - this->last_evaluation) > 30000UL)
+  if ((timer1_millis() - this->last_evaluation) > (this->period*5))
   {
     this->disable();
   }

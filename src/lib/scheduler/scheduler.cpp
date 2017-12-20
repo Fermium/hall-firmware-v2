@@ -82,12 +82,26 @@ void run_tasks(ADS1115* Adc1,ADS1115* Adc2,HEATER* Heater,CGEN* Cgen,LED* Led){
 }
 
 /*!
-   \brief task0 - measure
-   \details takes one measure from each adc
+   \brief task0
+   \details task0 is the setup task. Must be able to run periodicall withouth messing up everything
    \param fromLastExecution milliseconds past the last time the task was executed
    \return 0 if executed, 2 if not execute, 1 if errored
  */
 int task0(unsigned long fromLastExecution)
+{
+        led->set_duty_cycle(127);
+        led->enable();
+
+}
+
+
+/*!
+   \brief task1 - measure
+   \details takes one measure from each adc
+   \param fromLastExecution milliseconds past the last time the task was executed
+   \return 0 if executed, 2 if not execute, 1 if errored
+ */
+int task1(unsigned long fromLastExecution)
 {
   static uint8_t lastRead=0;
 
@@ -133,11 +147,11 @@ int task0(unsigned long fromLastExecution)
 }
 
 /*!
-   \brief task1 - enqueue measures
+   \brief task2 - enqueue measures
    \param fromLastExecution milliseconds past the last time the task was executed
    \return 0 if executed, 2 if not execute, 1 if errored
  */
-int task1(unsigned long fromLastExecution)
+int task2(unsigned long fromLastExecution)
 {
         if(!measure_ready) {
                 return 2;
@@ -148,35 +162,27 @@ int task1(unsigned long fromLastExecution)
 }
 
 /*!
-   \brief task2
+   \brief task3
    \details Triggers the heater transition evaluation and other similar tasks
    \param fromLastExecution milliseconds past the last time the task was executed
    \return 0 if executed, 2 if not execute, 1 if errored
  */
-int task2(unsigned long fromLastExecution)
+int task3(unsigned long fromLastExecution)
 {
         heater->evaluate();
         led->evaluate();
         cgen->evaluate();
+
 }
 
 /*!
    \brief evaluates the current cgen-in
    \param fromLastExecution milliseconds past the last time the task was executed
  */
-int task3(unsigned long fromLastExecution)
-{
-}
-
-/*!
-   \brief task4
-   \param fromLastExecution milliseconds past the last time the task was executed
-   \return 0 if executed, 2 if not execute, 1 if errored
- */
 int task4(unsigned long fromLastExecution)
 {
-
 }
+
 /*!
    \brief task5
    \param fromLastExecution milliseconds past the last time the task was executed
@@ -186,7 +192,6 @@ int task5(unsigned long fromLastExecution)
 {
 
 }
-
 /*!
    \brief safety measures
    \details Checks whether all measures are in-parameter, otherwise shutdown down what needs to be shut down.

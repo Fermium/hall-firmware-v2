@@ -23,7 +23,7 @@
       unsigned long period; /*!< Time in milliseconds it takes to complete a full cycle */
       const static unsigned long full_scale = 255; /*!< Max value of the duty cycle, to be considere an always-on state. Usually 100 or 255 */
       bool state; /*!< Present state of the Heater, true for ON, false for OFF */
-      unsigned long last_evaluation = timer1_millis(); /*!< last time the heater state was evaluated */
+      unsigned long last_evaluation = 0; /*!< last time the heater state was evaluated */
 
     public :
       HEATER(uint8_t port,uint8_t pin);

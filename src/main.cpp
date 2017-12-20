@@ -208,11 +208,8 @@ void Event_Init(void) {
 void MainRoutine(void) {
 				if (datachan_output_enabled()) {
 								//Start the led quick blinking
-								led.set_duty_cycle(127);
-								led.set_period_ms(1000);
-								led.enable();
-								led.evaluate();
 								run_tasks(&adc1,&adc2,&heater,&cgen,&led);
+								fire_extinguisher();
 				}
 
 

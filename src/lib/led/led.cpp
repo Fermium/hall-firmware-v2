@@ -20,6 +20,8 @@ LED::LED(uint8_t port,uint8_t pin){
   this->port = port;
   this->state = false;
   this->duty_cycle = LED_DUTY_CYCLE;
+  this->period = 1000;
+  this->last_evaluation = timer1_millis();
   portwrite(this->port,this->pin,false);
   ddrwrite(this->port,this->pin,DDR_OUTPUT);
 }
@@ -88,7 +90,7 @@ void LED::off(){
 \brief Turn off if it has not been running for 4 cycles
 */
 void LED::watchdog(){
-  if ((timer1_millis() - this->last_evaluation) > 10000UL)
+  if ((timer1_millis() - this->last_evaluation) > (this->period*5))
   {
     this->disable();
   }
