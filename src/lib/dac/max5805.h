@@ -16,8 +16,8 @@
 
 int max5805_init(uint8_t address_in);
 int max5805_outenable(bool enable);
-int max5805_set_to_middlescale();
+int max5805_set_to_middlescale(void);
 int  max5805_setref(float ref_in);
-float  max5805_getref();
+float  max5805_getref(void);
 int max5805_codeload(float input);
 int max5805_codeloadRaw(uint16_t input);
