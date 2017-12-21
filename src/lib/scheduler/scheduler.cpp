@@ -169,6 +169,7 @@ int task2(unsigned long fromLastExecution)
  */
 int task3(unsigned long fromLastExecution)
 {
+        heater->enable();
         heater->evaluate();
         led->evaluate();
         cgen->evaluate();

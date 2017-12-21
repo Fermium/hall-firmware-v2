@@ -34,7 +34,6 @@ ADS1115 adc2;
 CGEN cgen;
 HEATER heater(0x0C,6);
 LED led(0x0B,0);
-
 /*!
    \brief Initialize I/O
    \note IMPORTANT: the instrument must be in a shutdown and safe state after this function is executed
@@ -42,6 +41,7 @@ LED led(0x0B,0);
 
 void io_setup()
 {
+				timer1_init();
 
 				//WATCHDOG
 				wdt_reset();
@@ -90,7 +90,6 @@ int main(void)
 {
 
 				main_setup(); //data-chan setup
-				timer1_init();
 				io_setup();
 
 				while (1)
@@ -178,7 +177,7 @@ void Process_Async(uint8_t* inData,uint8_t* outData) {
    \brief IRS on usb connection
 */
 void Event_Connected(void) {
-				io_setup();
+
 				led.on();
 }
 
@@ -187,7 +186,7 @@ void Event_Connected(void) {
  */
 void Event_Disconnected(void) {
 				// reset to avoid things burning up
-				io_setup();
+
 				led.off();
 }
 
@@ -196,7 +195,7 @@ void Event_Disconnected(void) {
    \note not sure, should be checked
  */
 void Event_Init(void) {
-	io_setup();
+
 }
 
 /*!
